@@ -1,0 +1,6 @@
+#include "random.h"
+static thread_local std::minstd_rand generator(std::random_device{}());
+int Random::getInt(int min, int max) {
+	static thread_local std::uniform_int_distribution<int> dist;
+	return dist(generator, decltype(dist)::param_type{min, max});
+}
