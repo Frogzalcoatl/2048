@@ -1,4 +1,4 @@
-#include "random.h"
+#include "2048/game/random.h"
 static thread_local std::minstd_rand generator(std::random_device{}());
 int getRandomInt(int min, int max) {
 	static thread_local std::uniform_int_distribution<int> dist;

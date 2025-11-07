@@ -1,7 +1,9 @@
 #include <iostream>
-#include "board.h"
-#include "random.h"
+#include "2048/game/board.h"
+#include "2048/game/random.h"
 using namespace std;
+
+Board board;
 
 void Board::clear() {
 	for (int i = 0; i < tiles.size(); i++) {
@@ -38,13 +40,20 @@ bool Board::populate() {
 }
 
 sf::String Board::getTestString() {
-	string str = "";
+	sf::String str("");
 	for (int i = 0; i < tiles.size(); i++) {
 		for (int j = 0; j < tiles[i].size(); j++) {
-			str += to_string(tiles[i][j]);
-			str += " ";
+			str.insert(str.getSize(), sf::String(to_string(tiles[i][j]) + " "));
 		}
-		str += "\n";
+		str.insert(str.getSize(), sf::String("\n"));
 	}
-	return sf::String(str);
+	return str;
 }
+
+void Board::moveUp() {}
+
+void Board::moveDown() {}
+
+void Board::moveRight() {}
+
+void Board::moveLeft() {}

@@ -1,3 +1,4 @@
+#pragma once
 #include <array>
 #include <vector>
 #include <SFML/System/String.hpp>
@@ -21,3 +22,4 @@ private:
 	}};
 	bool fillRandomEmptyTile(std::vector<std::array<int, 2>>& emptyTileIndexes);
 };
+extern Board board;
