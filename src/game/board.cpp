@@ -17,7 +17,7 @@ bool Board::fillRandomEmptyTile(vector<array<int, 2>>& emptyTileIndexes) {
 	}
 	int randomEmptyTileIndex = getRandomInt(0, emptyTileIndexes.size() - 1);
 	tiles[emptyTileIndexes[randomEmptyTileIndex][0]][emptyTileIndexes[randomEmptyTileIndex][1]] = getRandomInt(0, 19) > 3 ? 2 : 4;
-	emptyTileIndexes.erase(emptyTileIndexes.begin());
+	emptyTileIndexes.erase(emptyTileIndexes.begin() + randomEmptyTileIndex);
 	return true;
 }
 
