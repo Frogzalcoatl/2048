@@ -1,16 +1,23 @@
 #include <array>
-using namespace std;
+#include <vector>
+#include <SFML/System/String.hpp>
 
 class Board {
-	array<array<uint64_t, 4>, 4> tiles = {{
+public:
+	bool populate();
+	void moveRight();
+	void moveLeft();
+	void moveUp();
+	void moveDown();
+	sf::String getTestString();
+	void clear();
+
+private:
+	std::array<std::array<uint64_t, 4>, 4> tiles = {{
 	    {0, 0, 0, 0},
 	    {0, 0, 0, 0},
 	    {0, 0, 0, 0},
 	    {0, 0, 0, 0},
 	}};
-	void populate();
-	void moveRight();
-	void moveLeft();
-	void moveUp();
-	void moveDown();
+	bool fillRandomEmptyTile(std::vector<std::array<int, 2>>& emptyTileIndexes);
 };

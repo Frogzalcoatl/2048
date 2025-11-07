@@ -1,5 +1,3 @@
 #include <random>
 using namespace std;
-namespace Random {
-	int getInt(int min, int max);
-}
+int getRandomInt(int min, int max);
