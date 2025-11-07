@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-	auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "CMake SFML Project");
+	auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "2048");
 	window.setFramerateLimit(60);
 	const sf::Font font(".\\assets\\fonts\\DejaVuSans.ttf");
 	sf::Text text(font, "", 100);
