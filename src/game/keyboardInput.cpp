@@ -1,7 +1,6 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "2048/game/keyboardInput.h"
 #include "2048/game/board.h"
-#include <iostream>
 using namespace std;
 
 KeyboardInput keyboardInput;

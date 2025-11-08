@@ -7,7 +7,7 @@ using namespace std;
 int main() {
 	auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "2048");
 	window.setFramerateLimit(60);
-	const sf::Font font(".\\assets\\fonts\\DejaVuSans.ttf");
+	const sf::Font font(".\\assets\\fonts\\ClearSans-Bold.ttf");
 	sf::Text text(font, "", 100);
 	board.populate();
 	while (window.isOpen()) {
