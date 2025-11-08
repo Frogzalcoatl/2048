@@ -8,10 +8,8 @@
 
 class KeyboardInput {
 private:
-	bool keyPressFunctionRunThisFrame = false;
-
-	std::unordered_map<sf::Keyboard::Scancode, bool> pressedLastFrame = {
-	    {sf::Keyboard::Scancode::P, false},
+	std::unordered_map<sf::Keyboard::Scancode, bool> isPressed = {
+	    {sf::Keyboard::Scancode::R, false},
 	    {sf::Keyboard::Scancode::Up, false},
 	    {sf::Keyboard::Scancode::W, false},
 	    {sf::Keyboard::Scancode::Down, false},
@@ -21,21 +19,10 @@ private:
 	    {sf::Keyboard::Scancode::Left, false},
 	    {sf::Keyboard::Scancode::A, false}};
 
-	std::unordered_map<sf::Keyboard::Scancode, std::function<void()>> keyPressFunctions = {
-	    {sf::Keyboard::Scancode::P, []() {
-		     board.clear();
-		     board.populate();
-	     }},
-	    {sf::Keyboard::Scancode::Up, []() { board.moveUp(); }},
-	    {sf::Keyboard::Scancode::W, []() { board.moveUp(); }},
-	    {sf::Keyboard::Scancode::Down, []() { board.moveDown(); }},
-	    {sf::Keyboard::Scancode::S, []() { board.moveDown(); }},
-	    {sf::Keyboard::Scancode::Right, []() { board.moveRight(); }},
-	    {sf::Keyboard::Scancode::D, []() { board.moveRight(); }},
-	    {sf::Keyboard::Scancode::Left, []() { board.moveLeft(); }},
-	    {sf::Keyboard::Scancode::A, []() { board.moveLeft(); }}};
+	void runScancode(const sf::Keyboard::Scancode scancode);
 
 public:
-	void update();
+	void pressed(std::optional<const sf::Event::KeyPressed*> keyPressed);
+	void released(std::optional<const sf::Event::KeyReleased*> keyReleased);
 };
 extern KeyboardInput keyboardInput;

@@ -50,10 +50,17 @@ sf::String Board::getTestString() {
 	return str;
 }
 
+void Board::mergeLine(std::array<uint64_t, 4>& line) {
+}
+
 void Board::moveUp() {}
 
 void Board::moveDown() {}
 
 void Board::moveRight() {}
 
-void Board::moveLeft() {}
+void Board::moveLeft() {
+	for (auto& line : tiles) {
+		mergeLine(line);
+	}
+}

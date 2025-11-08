@@ -21,5 +21,6 @@ private:
 	    {0, 0, 0, 0},
 	}};
 	bool fillRandomEmptyTile(std::vector<std::array<int, 2>>& emptyTileIndexes);
+	void mergeLine(std::array<uint64_t, 4>& line);
 };
 extern Board board;
