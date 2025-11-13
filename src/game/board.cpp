@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "2048/game/board.hpp"
 #include "2048/game/random.hpp"
 using namespace std;
