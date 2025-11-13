@@ -63,7 +63,6 @@ vector<uint64_t> Board::mergeLine(const vector<uint64_t>& line) {
 			j++;
 		}
 	}
-	output.resize(line.size(), 0);
 	return output;
 }
 
