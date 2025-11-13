@@ -19,10 +19,10 @@ private:
 	    {sf::Keyboard::Scancode::Left, false},
 	    {sf::Keyboard::Scancode::A, false}};
 
-	void runScancode(const sf::Keyboard::Scancode scancode);
+	void runScancode(const sf::Keyboard::Scancode scancode, Board* board);
 
 public:
-	void pressed(std::optional<const sf::Event::KeyPressed*> keyPressed);
+	void pressed(std::optional<const sf::Event::KeyPressed*> keyPressed, Board* board);
 	void released(std::optional<const sf::Event::KeyReleased*> keyReleased);
 };
 extern KeyboardInput keyboardInput;

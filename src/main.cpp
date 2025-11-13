@@ -9,13 +9,13 @@ int main() {
 	window.setFramerateLimit(60);
 	const sf::Font font(".\\assets\\fonts\\ClearSans-Bold.ttf");
 	sf::Text text(font, "", 100);
-	board.populate();
+	Board board = Board(2);
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
 				window.close();
 			} else if (const auto keyPressed = event->getIf<sf::Event::KeyPressed>()) {
-				keyboardInput.pressed(keyPressed);
+				keyboardInput.pressed(keyPressed, &board);
 			} else if (const auto keyReleased = event->getIf<sf::Event::KeyReleased>()) {
 				keyboardInput.released(keyReleased);
 			}

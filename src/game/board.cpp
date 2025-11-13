@@ -3,64 +3,128 @@
 #include "2048/game/random.h"
 using namespace std;
 
-Board board;
-
-void Board::clear() {
-	for (int i = 0; i < tiles.size(); i++) {
-		for (int j = 0; j < tiles[i].size(); j++) {
-			tiles[i][j] = 0;
-		}
-	}
-}
-
-bool Board::fillRandomEmptyTile(vector<array<int, 2>>& emptyTileIndexes) {
-	if (emptyTileIndexes.size() == 0) {
-		return false;
-	}
-	int randomEmptyTileIndex = getRandomInt(0, emptyTileIndexes.size() - 1);
-	tiles[emptyTileIndexes[randomEmptyTileIndex][0]][emptyTileIndexes[randomEmptyTileIndex][1]] = getRandomInt(0, 19) > 3 ? 2 : 4;
-	emptyTileIndexes.erase(emptyTileIndexes.begin() + randomEmptyTileIndex);
-	return true;
+Board::Board() {
+	tiles.fill(0);
 }
 
 bool Board::populate() {
-	vector<array<int, 2>> emptyTileIndexes = {};
-	for (int i = 0; i < tiles.size(); i++) {
-		for (int j = 0; j < tiles[i].size(); j++) {
-			if (tiles[i][j] == 0) {
-				emptyTileIndexes.push_back({i, j});
-			}
+	vector<size_t> emptyIndexes;
+	for (size_t i = 0; i < tiles.size(); i++) {
+		if (tiles[i] == 0) {
+			emptyIndexes.push_back(i);
 		}
 	}
-	if (!Board::fillRandomEmptyTile(emptyTileIndexes)) {
+	if (emptyIndexes.size() == 0) {
 		return false;
 	}
-	Board::fillRandomEmptyTile(emptyTileIndexes);
+	const size_t i = emptyIndexes[getRandomInt(0, emptyIndexes.size() - 1)];
+	tiles[i] = getRandomInt(0, 19) > 3 ? 2 : 4;
 	return true;
+}
+
+Board::Board(size_t prefill) {
+	tiles.fill(0);
+	for (size_t i = 0; i < prefill; i++) {
+		populate();
+	}
+}
+
+void Board::reset() {
+	tiles.fill(0);
 }
 
 sf::String Board::getTestString() {
 	sf::String str("");
-	for (int i = 0; i < tiles.size(); i++) {
-		for (int j = 0; j < tiles[i].size(); j++) {
-			str.insert(str.getSize(), sf::String(to_string(tiles[i][j]) + " "));
+	for (size_t i = 0; i < tiles.size(); i++) {
+		if (i % 4 == 0) {
+			str.insert(str.getSize(), sf::String("\n"));
 		}
-		str.insert(str.getSize(), sf::String("\n"));
+		str.insert(str.getSize(), sf::String(to_string(tiles[i]) + " "));
 	}
 	return str;
 }
 
-void Board::mergeLine(std::array<uint64_t, 4>& line) {
+array<uint64_t, 4> Board::mergeLine(const array<uint64_t, 4>& line) {
+	array<uint64_t, 4> output;
+	output.fill(0);
+	uint64_t j = 0;
+	uint64_t jValue = 0;
+	for (size_t i = 0; i < line.size(); i++) {
+		uint64_t currentValue = line[i];
+		if (currentValue == 0) {
+			continue;
+		}
+		if (currentValue == jValue) {
+			output[j - 1] *= 2;
+			jValue = 0;
+		} else {
+			jValue = currentValue;
+			output[j] = currentValue;
+			j++;
+		}
+	}
+	return output;
 }
 
-void Board::moveUp() {}
+void reverseArray(std::array<uint64_t, 4>& arr) {
+	for (size_t i = 0; i < arr.size() / 2; i++) {
+		swap(arr[i], arr[arr.size() - i - 1]);
+	}
+}
 
-void Board::moveDown() {}
+std::array<uint64_t, 4> Board::getRow(size_t i) {
+	std::array<uint64_t, 4> output;
+	size_t startIndex = i * width;
+	for (size_t i = 0; i < 4; i++) {
+		output[i] = tiles[startIndex + i];
+	}
+	return output;
+}
 
-void Board::moveRight() {}
+std::array<uint64_t, 4> Board::getColumn(size_t i) {
+	array<uint64_t, 4> output;
+	for (size_t j = 0; j < height; j++) {
+		output[j] = tiles[j * width + i];
+	}
+	return output;
+};
 
-void Board::moveLeft() {
-	for (auto& line : tiles) {
-		mergeLine(line);
+void Board::doMove(Direction direction) {
+	bool moved = false;
+	size_t size;
+	if (direction == Direction::Up || direction == Direction::Down) {
+		size = height;
+	} else {
+		size = width;
+	}
+	for (size_t i = 0; i < size; i++) {
+		array<uint64_t, 4> line;
+		if (direction == Direction::Up || direction == Direction::Down) {
+			line = getColumn(i);
+		} else {
+			line = getRow(i);
+		}
+		if (direction == Direction::Down || direction == Direction::Right) {
+			reverseArray(line);
+		}
+		array<uint64_t, 4> mergedLine = mergeLine(line);
+		if (direction == Direction::Down || direction == Direction::Right) {
+			reverseArray(mergedLine);
+		}
+		for (size_t j = 0; j < size; j++) {
+			size_t index;
+			if (direction == Direction::Up || direction == Direction::Down) {
+				index = j * width + i;
+			} else {
+				index = i * width + j;
+			}
+			if (tiles[index] != mergedLine[j]) {
+				moved = true;
+				tiles[index] = mergedLine[j];
+			}
+		}
+	}
+	if (moved) {
+		populate();
 	}
 }
