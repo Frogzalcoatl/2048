@@ -17,6 +17,8 @@ src/main.cpp
 src/game/board.cpp
 src/game/random.cpp
 src/game/keyboardInput.cpp
+src/ui/assets.cpp
+src/ui/buttons.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)

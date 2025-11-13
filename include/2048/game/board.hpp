@@ -1,5 +1,4 @@
 #pragma once
-#include <array>
 #include <vector>
 #include <SFML/System/String.hpp>
 
@@ -12,18 +11,18 @@ enum Direction {
 
 class Board {
 public:
-	const size_t width = 4;
-	const size_t height = 4;
-	Board();
-	Board(size_t prefill);
+	const size_t width;
+	const size_t height;
+	Board(size_t width, size_t height);
+	Board(size_t width, size_t height, size_t prefill);
 	bool populate();
 	void doMove(Direction direction);
 	void reset();
-	sf::String getTestString();
+	sf::String getDebugString();
 
 private:
-	std::array<uint64_t, 16> tiles;
-	std::array<uint64_t, 4> mergeLine(const std::array<uint64_t, 4>& line);
-	std::array<uint64_t, 4> getRow(size_t i);
-	std::array<uint64_t, 4> getColumn(size_t i);
+	std::vector<uint64_t> tiles;
+	std::vector<uint64_t> mergeLine(const std::vector<uint64_t>& line);
+	std::vector<uint64_t> getRow(size_t i);
+	std::vector<uint64_t> getColumn(size_t i);
 };

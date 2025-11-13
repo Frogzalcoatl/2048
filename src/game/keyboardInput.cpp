@@ -2,13 +2,8 @@
 #include "2048/game/keyboardInput.hpp"
 using namespace std;
 
-KeyboardInput keyboardInput;
-
-void KeyboardInput::pressed(optional<const sf::Event::KeyPressed*> keyPressed, Board* board) {
-	if (!keyPressed.has_value()) {
-		return;
-	}
-	const sf::Keyboard::Scancode scancode = keyPressed.value()->scancode;
+void KeyboardInput::pressed(const sf::Event::KeyPressed* keyPressed, Board* board) {
+	const sf::Keyboard::Scancode scancode = keyPressed->scancode;
 	if (!isPressed.count(scancode)) {
 		return;
 	}
@@ -18,11 +13,8 @@ void KeyboardInput::pressed(optional<const sf::Event::KeyPressed*> keyPressed, B
 	isPressed[scancode] = true;
 }
 
-void KeyboardInput::released(optional<const sf::Event::KeyReleased*> keyReleased) {
-	if (!keyReleased.has_value()) {
-		return;
-	}
-	const sf::Keyboard::Scancode scancode = keyReleased.value()->scancode;
+void KeyboardInput::released(const sf::Event::KeyReleased* keyReleased) {
+	const sf::Keyboard::Scancode scancode = keyReleased->scancode;
 	if (!isPressed.count(scancode)) {
 		return;
 	}

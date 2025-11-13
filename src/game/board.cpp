@@ -3,8 +3,8 @@
 #include "2048/game/random.hpp"
 using namespace std;
 
-Board::Board() {
-	tiles.fill(0);
+Board::Board(size_t width, size_t height) : width(width), height(height) {
+	tiles.resize(width * height, 0);
 }
 
 bool Board::populate() {
@@ -22,21 +22,21 @@ bool Board::populate() {
 	return true;
 }
 
-Board::Board(size_t prefill) {
-	tiles.fill(0);
+Board::Board(size_t width, size_t height, size_t prefill) : width(width), height(height) {
+	tiles.resize(width * height, 0);
 	for (size_t i = 0; i < prefill; i++) {
 		populate();
 	}
 }
 
 void Board::reset() {
-	tiles.fill(0);
+	fill(tiles.begin(), tiles.end(), 0);
 }
 
-sf::String Board::getTestString() {
-	sf::String str("");
+sf::String Board::getDebugString() {
+	sf::String str{""};
 	for (size_t i = 0; i < tiles.size(); i++) {
-		if (i % 4 == 0 && i != 0) {
+		if (i % width == 0 && i != 0) {
 			str.insert(str.getSize(), sf::String("\n"));
 		}
 		str.insert(str.getSize(), sf::String(to_string(tiles[i]) + " "));
@@ -44,9 +44,9 @@ sf::String Board::getTestString() {
 	return str;
 }
 
-array<uint64_t, 4> Board::mergeLine(const array<uint64_t, 4>& line) {
-	array<uint64_t, 4> output;
-	output.fill(0);
+vector<uint64_t> Board::mergeLine(const vector<uint64_t>& line) {
+	vector<uint64_t> output;
+	output.resize(line.size(), 0);
 	uint64_t j = 0;
 	uint64_t jValue = 0;
 	for (size_t i = 0; i < line.size(); i++) {
@@ -63,61 +63,49 @@ array<uint64_t, 4> Board::mergeLine(const array<uint64_t, 4>& line) {
 			j++;
 		}
 	}
+	output.resize(line.size(), 0);
 	return output;
 }
 
-void reverseArray(std::array<uint64_t, 4>& arr) {
-	for (size_t i = 0; i < arr.size() / 2; i++) {
-		swap(arr[i], arr[arr.size() - i - 1]);
-	}
-}
-
-std::array<uint64_t, 4> Board::getRow(size_t i) {
-	std::array<uint64_t, 4> output;
+vector<uint64_t> Board::getRow(size_t i) {
+	vector<uint64_t> output;
+	output.reserve(width);
 	size_t startIndex = i * width;
-	for (size_t i = 0; i < 4; i++) {
-		output[i] = tiles[startIndex + i];
+	for (size_t j = 0; j < width; j++) {
+		output.push_back(tiles[startIndex + j]);
 	}
 	return output;
 }
 
-std::array<uint64_t, 4> Board::getColumn(size_t i) {
-	array<uint64_t, 4> output;
+vector<uint64_t> Board::getColumn(size_t i) {
+	vector<uint64_t> output;
+	output.reserve(height);
 	for (size_t j = 0; j < height; j++) {
-		output[j] = tiles[j * width + i];
+		output.push_back(tiles[j * width + i]);
 	}
 	return output;
 };
 
 void Board::doMove(Direction direction) {
 	bool moved = false;
-	size_t size;
-	if (direction == Direction::Up || direction == Direction::Down) {
-		size = height;
-	} else {
-		size = width;
-	}
+	bool isVertical = direction == Direction::Up || direction == Direction::Down;
+	size_t size = isVertical ? height : width;
 	for (size_t i = 0; i < size; i++) {
-		array<uint64_t, 4> line;
+		vector<uint64_t> line;
 		if (direction == Direction::Up || direction == Direction::Down) {
 			line = getColumn(i);
 		} else {
 			line = getRow(i);
 		}
 		if (direction == Direction::Down || direction == Direction::Right) {
-			reverseArray(line);
+			reverse(line.begin(), line.end());
 		}
-		array<uint64_t, 4> mergedLine = mergeLine(line);
+		vector<uint64_t> mergedLine = mergeLine(line);
 		if (direction == Direction::Down || direction == Direction::Right) {
-			reverseArray(mergedLine);
+			reverse(mergedLine.begin(), mergedLine.end());
 		}
 		for (size_t j = 0; j < size; j++) {
-			size_t index;
-			if (direction == Direction::Up || direction == Direction::Down) {
-				index = j * width + i;
-			} else {
-				index = i * width + j;
-			}
+			size_t index = isVertical ? j * width + i : i * width + j;
 			if (tiles[index] != mergedLine[j]) {
 				moved = true;
 				tiles[index] = mergedLine[j];

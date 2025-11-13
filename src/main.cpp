@@ -2,16 +2,19 @@
 #include <iostream>
 #include "2048/game/board.hpp"
 #include "2048/game/keyboardInput.hpp"
+#include "2048/ui/assets.hpp"
 using namespace std;
 
 int main() {
-	auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "2048");
+	sf::RenderWindow window{sf::VideoMode{{1920u, 1080u}}, "2048"};
 	window.setFramerateLimit(60);
-	const sf::Font font(".\\assets\\fonts\\ClearSans-Bold.ttf");
-	sf::Text text(font, "", 100);
-	Board board = Board(2);
+	GameAssets assets;
+	assets.loadAll();
+	sf::Text debugText{assets.boldFont, "", 100};
+	Board board{4, 4, 2};
+	KeyboardInput keyboardInput;
 	while (window.isOpen()) {
-		while (const std::optional event = window.pollEvent()) {
+		while (const optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
 				window.close();
 			} else if (const auto keyPressed = event->getIf<sf::Event::KeyPressed>()) {
@@ -20,9 +23,9 @@ int main() {
 				keyboardInput.released(keyReleased);
 			}
 		}
-		text.setString(board.getTestString());
+		debugText.setString(board.getDebugString());
 		window.clear();
-		window.draw(text);
+		window.draw(debugText);
 		window.display();
 	}
 }

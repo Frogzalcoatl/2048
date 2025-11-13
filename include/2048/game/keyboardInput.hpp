@@ -22,7 +22,6 @@ private:
 	void runScancode(const sf::Keyboard::Scancode scancode, Board* board);
 
 public:
-	void pressed(std::optional<const sf::Event::KeyPressed*> keyPressed, Board* board);
-	void released(std::optional<const sf::Event::KeyReleased*> keyReleased);
+	void pressed(const sf::Event::KeyPressed* keyPressed, Board* board);
+	void released(const sf::Event::KeyReleased* keyReleased);
 };
-extern KeyboardInput keyboardInput;
