@@ -36,7 +36,7 @@ void Board::reset() {
 sf::String Board::getTestString() {
 	sf::String str("");
 	for (size_t i = 0; i < tiles.size(); i++) {
-		if (i % 4 == 0) {
+		if (i % 4 == 0 && i != 0) {
 			str.insert(str.getSize(), sf::String("\n"));
 		}
 		str.insert(str.getSize(), sf::String(to_string(tiles[i]) + " "));
