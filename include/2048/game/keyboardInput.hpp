@@ -4,7 +4,7 @@
 #include <functional>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
-#include "2048/game/board.h"
+#include "2048/game/board.hpp"
 
 class KeyboardInput {
 private:

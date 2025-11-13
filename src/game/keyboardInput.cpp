@@ -1,5 +1,5 @@
 #include <SFML/Window/Keyboard.hpp>
-#include "2048/game/keyboardInput.h"
+#include "2048/game/keyboardInput.hpp"
 using namespace std;
 
 KeyboardInput keyboardInput;

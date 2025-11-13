@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "2048/game/board.h"
-#include "2048/game/keyboardInput.h"
+#include "2048/game/board.hpp"
+#include "2048/game/keyboardInput.hpp"
 using namespace std;
 
 int main() {
