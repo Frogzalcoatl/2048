@@ -19,6 +19,8 @@ public:
 	void doMove(Direction direction);
 	void reset();
 	sf::String getDebugString();
+	// Expose tiles for rendering (read-only)
+	const std::vector<uint64_t>& getTiles() const;
 
 private:
 	std::vector<uint64_t> tiles;

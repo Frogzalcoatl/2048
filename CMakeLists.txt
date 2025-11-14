@@ -19,6 +19,7 @@ src/game/random.cpp
 src/game/keyboardInput.cpp
 src/ui/assets.cpp
 src/ui/buttons.cpp
+src/ui/boardRenderer.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
@@ -26,11 +27,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets)
 
 # Copy assets to build directory
-add_custom_command(TARGET 2048 POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/assets
-    ${CMAKE_BINARY_DIR}/assets
-)
+
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics)
+file(COPY ${CMAKE_SOURCE_DIR}/assets 
+     DESTINATION ${CMAKE_BINARY_DIR}/assets)

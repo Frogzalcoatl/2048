@@ -45,6 +45,10 @@ sf::String Board::getDebugString() {
 	return str;
 }
 
+const std::vector<uint64_t>& Board::getTiles() const {
+	return tiles;
+}
+
 vector<uint64_t> Board::mergeLine(const vector<uint64_t>& line) {
 	vector<uint64_t> output;
 	output.resize(line.size(), 0);
