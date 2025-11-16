@@ -8,6 +8,14 @@ Board::Board(size_t width, size_t height) : width(width), height(height) {
 	tiles.resize(width * height, 0);
 }
 
+void Board::testFill() {
+	int current = 2;
+	for (auto& tile : tiles) {
+		tile = current;
+		current *= 2;
+	}
+}
+
 bool Board::populate() {
 	vector<size_t> emptyIndexes;
 	for (size_t i = 0; i < tiles.size(); i++) {
@@ -119,4 +127,23 @@ void Board::doMove(Direction direction) {
 	if (moved) {
 		populate();
 	}
+}
+
+bool Board::isGameOver() {
+	size_t sizeOfTiles = tiles.size();
+	for (size_t i = 0; i < sizeOfTiles; i++) {
+		if (tiles[i] == 0) {
+			return false;
+		}
+	}
+	for (size_t i = 0; i < sizeOfTiles; i++) {
+		size_t belowIndex = i + width;
+		if (belowIndex < sizeOfTiles && tiles[i] == tiles[belowIndex]) {
+			return false;
+		}
+		if (i % width != width - 1 && (i + 1) < sizeOfTiles && tiles[i] == tiles[i + 1]) {
+			return false;
+		}
+	}
+	return true;
 }

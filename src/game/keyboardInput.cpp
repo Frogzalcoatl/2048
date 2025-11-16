@@ -1,5 +1,6 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "2048/game/keyboardInput.hpp"
+#include <iostream>
 using namespace std;
 
 void KeyboardInput::pressed(const sf::Event::KeyPressed* keyPressed, Board* board) {
@@ -23,6 +24,13 @@ void KeyboardInput::released(const sf::Event::KeyReleased* keyReleased) {
 
 void KeyboardInput::runScancode(const sf::Keyboard::Scancode scancode, Board* board) {
 	switch (scancode) {
+		case sf::Keyboard::Scancode::F: {
+			board->testFill();
+			cout << "testFill run" << endl;
+		}; break;
+		case sf::Keyboard::Scancode::T: {
+			cout << boolalpha << board->isGameOver() << endl;
+		}; break;
 		case sf::Keyboard::Scancode::R: {
 			board->reset();
 			board->populate();

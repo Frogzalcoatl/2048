@@ -9,6 +9,8 @@
 class KeyboardInput {
 private:
 	std::unordered_map<sf::Keyboard::Scancode, bool> isPressed = {
+	    {sf::Keyboard::Scancode::F, false},
+	    {sf::Keyboard::Scancode::T, false},
 	    {sf::Keyboard::Scancode::R, false},
 	    {sf::Keyboard::Scancode::Up, false},
 	    {sf::Keyboard::Scancode::W, false},
