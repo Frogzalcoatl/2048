@@ -7,6 +7,7 @@ using namespace std;
 Game2048::Game2048(size_t boardWidth, size_t boardHeight)
     : window{sf::VideoMode::getDesktopMode(), "2048", sf::Style::None}, board{boardWidth, boardHeight, 2}, keyboardInput{}, mouseInput{} {
 	assets.loadAll();
+	window.setIcon(assets.icon);
 	window.setVerticalSyncEnabled(true);
 	setUIScreen(UIScreenTypes::Menu);
 }

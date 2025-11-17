@@ -12,27 +12,37 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(${PROJECT_NAME}
-src/main.cpp
-src/game2048.cpp
-src/game/board.cpp
-src/game/random.cpp
-src/input/keyboard.cpp
-src/input/mouse.cpp
-src/ui/assets.cpp
-src/ui/boardRenderer.cpp
-src/ui/button.cpp
-src/ui/element.cpp
-src/ui/screens/base.cpp
-src/ui/screens/game.cpp
-src/ui/screens/menu.cpp
+set(SOURCES
+    src/main.cpp
+    src/game2048.cpp
+    src/game/board.cpp
+    src/game/random.cpp
+    src/input/keyboard.cpp
+    src/input/mouse.cpp
+    src/ui/assets.cpp
+    src/ui/boardRenderer.cpp
+    src/ui/button.cpp
+    src/ui/element.cpp
+    src/ui/screens/base.cpp
+    src/ui/screens/game.cpp
+    src/ui/screens/menu.cpp
 )
+
+if(WIN32)
+    add_executable(${PROJECT_NAME} WIN32 ${SOURCES} resources/icon.rc)
+elseif(APPLE)
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES})
+    set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE_ICON_FILE 2048.icns)
+    target_sources(${PROJECT_NAME} PRIVATE resources/2048.icns)
+    set_source_files_properties(resources/2048.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+else()
+    add_executable(${PROJECT_NAME} ${SOURCES})
+endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics)
-file(COPY ${CMAKE_SOURCE_DIR}/assets 
-     DESTINATION ${CMAKE_BINARY_DIR}/assets)
+target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics SFML::Main)
+file(COPY ${CMAKE_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR}/assets)
