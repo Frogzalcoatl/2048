@@ -21,8 +21,3 @@ private:
 	UIElementColorParams clicked;
 	void updateColors(UIElementColorParams& colors);
 };
-
-namespace CursorManager {
-	sf::Cursor& getHoveredCursor();
-	sf::Cursor& getNormalCursor();
-}

@@ -1,5 +1,6 @@
 #include "2048/ui/screens/base.hpp"
 #include "2048/ui/button.hpp"
+#include "2048/ui/cursorManager.hpp"
 using namespace std;
 
 ScreenResult UIScreen::draw(MouseInput& mouseInput, sf::RenderWindow& window) {

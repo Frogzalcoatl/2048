@@ -1,17 +1,6 @@
 #include "2048/ui/button.hpp"
+#include "2048/ui/cursorManager.hpp"
 using namespace std;
-
-namespace CursorManager {
-	sf::Cursor& getHoveredCursor() {
-		static sf::Cursor cursor = sf::Cursor(sf::Cursor::Type::Hand);
-		return cursor;
-	}
-
-	sf::Cursor& getNormalCursor() {
-		static sf::Cursor cursor = sf::Cursor(sf::Cursor::Type::Arrow);
-		return cursor;
-	}
-}
 
 Button::Button(
 	function<ScreenResult()> onClick, const sf::Vector2f& pos, const UIElementColorParams& normalColors, const UIElementColorParams& hoveredColors, const UIElementColorParams& clickedColors, 
