@@ -9,7 +9,7 @@
 class Button : public UIElement {
 public:
 	Button(
-		std::function<ScreenResult()> onClick, sf::Vector2f& pos, const UIElementColorParams& normalColors, const UIElementColorParams& hoveredColors, const UIElementColorParams& clickedColors,
+		std::function<ScreenResult()> onClick, const sf::Vector2f& pos, const UIElementColorParams& normalColors, const UIElementColorParams& hoveredColors, const UIElementColorParams& clickedColors,
 		std::optional<UIElementTextParams> textParams, std::optional<sf::RectangleShape> background = std::nullopt
 	);
 	ScreenResult update(MouseInput& mouseInput, sf::RenderWindow& window);

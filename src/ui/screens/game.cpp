@@ -114,6 +114,7 @@ ScreenResult GameScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
 		case sf::Keyboard::Scancode::A: {
 			board.doMove(Direction::Left);
 		}; break;
+		default: break;
 	}
 	return ScreenResult{};
 }

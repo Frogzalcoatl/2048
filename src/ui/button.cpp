@@ -2,7 +2,7 @@
 using namespace std;
 
 Button::Button(
-	function<ScreenResult()> onClick, sf::Vector2f& pos, const UIElementColorParams& normalColors, const UIElementColorParams& hoveredColors, const UIElementColorParams& clickedColors, 
+	function<ScreenResult()> onClick, const sf::Vector2f& pos, const UIElementColorParams& normalColors, const UIElementColorParams& hoveredColors, const UIElementColorParams& clickedColors, 
 	optional<UIElementTextParams> textParams, optional<sf::RectangleShape> background
 ) : UIElement(pos, normalColors, textParams, background), onClick(onClick), normal(normalColors), hovered(hoveredColors), clicked(clickedColors) {}
 
