@@ -5,7 +5,8 @@
 using namespace std;
 
 Game2048::Game2048(size_t boardWidth, size_t boardHeight)
-    : window{sf::VideoMode::getDesktopMode(), "2048", sf::Style::None}, board{boardWidth, boardHeight, 2}, keyboardInput{}, mouseInput{} {
+    : window{sf::VideoMode::getDesktopMode(), "2048", sf::Style::Titlebar | sf::Style::Close}, board{boardWidth, boardHeight, 2},
+	backgroundColor{0xFAF8EFFF}, keyboardInput{}, mouseInput{} {
 	assets.loadAll();
 	window.setIcon(assets.icon);
 	window.setVerticalSyncEnabled(true);
@@ -13,7 +14,6 @@ Game2048::Game2048(size_t boardWidth, size_t boardHeight)
 }
 
 void Game2048::run() {
-	const sf::Color backgroundColor{0xFAF8EFFF};
 	while (window.isOpen()) {
 		while (const optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
@@ -27,7 +27,7 @@ void Game2048::run() {
 				keyboardInput.released(keyReleased);
 			}
 		}
-		mouseInput.update();
+		mouseInput.update(window);
 		window.clear(backgroundColor);
 		draw();
 		window.display();

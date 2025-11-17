@@ -2,8 +2,11 @@
 #include "2048/input/mouse.hpp"
 using namespace std;
 
-void MouseInput::update() {
-	pos = sf::Mouse::getPosition();
+void MouseInput::update(sf::RenderWindow& window) {
+	sf::Vector2i windowPos = window.getPosition();
+	mousePos = sf::Mouse::getPosition();
+	mousePos.x -= windowPos.x;
+	mousePos.y -= windowPos.y;
 	bool leftClickDownLastTick = leftClickDown;
 	leftClickDown = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
 	if (leftClickDownLastTick && !leftClickDown) {
@@ -14,7 +17,7 @@ void MouseInput::update() {
 }
 
 sf::Vector2i MouseInput::getPos() {
-	return pos;
+	return mousePos;
 }
 
 bool MouseInput::isLeftClickDown() {

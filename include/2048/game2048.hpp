@@ -25,4 +25,5 @@ private:
 	MouseInput mouseInput;
 	GameAssets assets;
 	std::unique_ptr<UIScreen> currentUIScreen;
+	sf::Color backgroundColor;
 };
