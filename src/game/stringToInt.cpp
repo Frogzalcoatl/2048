@@ -3,8 +3,6 @@
 #include <iostream>
 using namespace std;
 
-// https://en.cppreference.com/w/cpp/string/basic_string/stoul
-
 uint64_t stringToUInt64(string str) {
     uint64_t value;
     try {

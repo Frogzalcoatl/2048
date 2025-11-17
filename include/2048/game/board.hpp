@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include <SFML/System/String.hpp>
 
 enum Direction {
 	Up,
@@ -21,8 +20,6 @@ public:
 	const std::vector<uint64_t>& getTiles() const;
 	void updateGameOverStatus();
 	bool getGameOverStatus();
-	std::string getDebugString();
-	void testFill();
 	uint64_t getScore();
 
 private:

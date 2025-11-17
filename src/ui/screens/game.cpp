@@ -85,10 +85,6 @@ GameScreen::GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& boar
 
 ScreenResult GameScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
     switch (scancode) {
-		case sf::Keyboard::Scancode::F: {
-            board.testFill();
-			board.updateGameOverStatus();
-		}; break;
 		case sf::Keyboard::Scancode::Up:
 		case sf::Keyboard::Scancode::W: {
 			board.doMove(Direction::Up);

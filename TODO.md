@@ -2,7 +2,6 @@
 
 ### Project Requirements
 * Class Inheritance (Multiple)
-* Score display
 
 ### Extra Stuff
 * Window Resizability

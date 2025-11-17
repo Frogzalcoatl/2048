@@ -1,21 +1,11 @@
 #include <algorithm>
 #include "2048/game/board.hpp"
 #include "2048/game/random.hpp"
+#include <string>
 using namespace std;
 
 Board::Board(size_t width, size_t height) : width(width), height(height) {
 	tiles.resize(width * height, 0);
-}
-
-void Board::testFill() {
-	if (gameOverStatus) {
-		return;
-	}
-	int current = 2;
-	for (auto& tile : tiles) {
-		tile = current;
-		current *= 2;
-	}
 }
 
 bool Board::populate() {
@@ -43,17 +33,6 @@ Board::Board(size_t width, size_t height, size_t prefill) : width(width), height
 void Board::reset() {
 	gameOverStatus = false;
 	fill(tiles.begin(), tiles.end(), 0);
-}
-
-string Board::getDebugString() {
-	string str = "";
-	for (size_t i = 0; i < tiles.size(); i++) {
-		if (i % width == 0 && i != 0) {
-			str += "\n";
-		}
-		str += to_string(tiles[i]) + " ";
-	}
-	return str;
 }
 
 const vector<uint64_t>& Board::getTiles() const {

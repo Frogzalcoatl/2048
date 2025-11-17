@@ -5,9 +5,8 @@ using namespace std;
 ScreenResult UIScreen::draw(MouseInput& mouseInput, sf::RenderWindow& window) {
     window.setMouseCursor(cursorNormal);
     ScreenResult finalResult{};
-    for (auto& u_ptr : elements) {
-        auto element = u_ptr.get();
-        if (Button* button = dynamic_cast<Button*>(element)) {
+    for (auto& element : elements) {
+        if (Button* button = dynamic_cast<Button*>(element.get())) {
             ScreenResult result = button->update(mouseInput, window);
             if (result.action == ScreenAction::ExitGame) {
                 return ScreenResult{ScreenAction::ExitGame};
