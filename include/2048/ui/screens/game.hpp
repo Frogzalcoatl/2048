@@ -8,7 +8,7 @@ public:
     GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& board);
     ScreenResult draw(MouseInput& mouseInput, sf::RenderWindow& window) override;
     ScreenResult handleKeyboardInput(sf::Keyboard::Scancode scancode) override;
-    void setScore(uint64_t newScore);
+    void setScore(std::uint64_t newScore);
 private:
     Board& board;
     GameAssets& assets;
