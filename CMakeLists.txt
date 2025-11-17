@@ -14,20 +14,23 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(${PROJECT_NAME}
 src/main.cpp
+src/game2048.cpp
 src/game/board.cpp
 src/game/random.cpp
-src/game/keyboardInput.cpp
+src/input/keyboard.cpp
+src/input/mouse.cpp
 src/ui/assets.cpp
-src/ui/buttons.cpp
 src/ui/boardRenderer.cpp
+src/ui/button.cpp
+src/ui/element.cpp
+src/ui/screens/base.cpp
+src/ui/screens/game.cpp
+src/ui/screens/menu.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets)
-
-# Copy assets to build directory
-
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics)

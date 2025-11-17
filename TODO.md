@@ -1,14 +1,13 @@
 # Todo List
 
-* ### Class Inheritance
-    * Single
-    * Multiple
-    * Hierachical
-    * Multi-level
+### Project Requirements
+* Class Inheritance (Multiple)
+* Score display
 
-* ### Polymorphism
-    * Compile-time (overloading)
-    * Run-time (virtual functions)
+### Extra Stuff
+* Window Resizability
+* Optimize cursor style management
+* boardRenderer animations
+* Fix general formatting and code efficiency issues
+* Improve UIElement management
 
-* ### Abstraction
-    * An abstract class

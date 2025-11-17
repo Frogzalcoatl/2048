@@ -3,10 +3,10 @@
 #include <SFML/System/String.hpp>
 
 enum Direction {
-	Up = 1,
-	Down = 2,
-	Right = 3,
-	Left = 4
+	Up,
+	Down,
+	Right,
+	Left
 };
 
 class Board {
@@ -19,11 +19,14 @@ public:
 	void doMove(Direction direction);
 	void reset();
 	const std::vector<uint64_t>& getTiles() const;
-	bool isGameOver();
-	sf::String getDebugString();
+	void updateGameOverStatus();
+	bool getGameOverStatus();
+	std::string getDebugString();
 	void testFill();
+	uint64_t getScore();
 
 private:
+	bool gameOverStatus = false;
 	std::vector<uint64_t> tiles;
 	std::vector<uint64_t> mergeLine(const std::vector<uint64_t>& line);
 	std::vector<uint64_t> getRow(size_t i);

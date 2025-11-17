@@ -2,8 +2,6 @@
 #include <cmath>
 #include <sstream>
 
-using namespace Graphics2048;
-
 BoardRenderer::BoardRenderer(GameAssets* assets, size_t boardWidth, size_t boardHeight)
     : assets(assets), boardWidth(boardWidth), boardHeight(boardHeight) {
     tiles.resize(boardWidth * boardHeight);
@@ -43,8 +41,8 @@ void BoardRenderer::render(sf::RenderTarget& target, const Board& board) {
     const float now = clock.getElapsedTime().asSeconds();
 
     // layout
-    const float tileSize = 150.f;
-    const float padding = 15.f;
+    const float tileSize = 175.f;
+    const float padding = 17.5f;
     const float boardW = boardWidth * tileSize + (boardWidth + 1) * padding;
     const float boardH = boardHeight * tileSize + (boardHeight + 1) * padding;
     const sf::Vector2f winSize(static_cast<float>(target.getSize().x), static_cast<float>(target.getSize().y));

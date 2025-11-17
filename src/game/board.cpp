@@ -1,4 +1,3 @@
-#include <iostream>
 #include <algorithm>
 #include "2048/game/board.hpp"
 #include "2048/game/random.hpp"
@@ -9,6 +8,9 @@ Board::Board(size_t width, size_t height) : width(width), height(height) {
 }
 
 void Board::testFill() {
+	if (gameOverStatus) {
+		return;
+	}
 	int current = 2;
 	for (auto& tile : tiles) {
 		tile = current;
@@ -39,16 +41,17 @@ Board::Board(size_t width, size_t height, size_t prefill) : width(width), height
 }
 
 void Board::reset() {
+	gameOverStatus = false;
 	fill(tiles.begin(), tiles.end(), 0);
 }
 
-sf::String Board::getDebugString() {
-	sf::String str{""};
+string Board::getDebugString() {
+	string str = "";
 	for (size_t i = 0; i < tiles.size(); i++) {
 		if (i % width == 0 && i != 0) {
-			str.insert(str.getSize(), sf::String("\n"));
+			str += "\n";
 		}
-		str.insert(str.getSize(), sf::String(to_string(tiles[i]) + " "));
+		str += to_string(tiles[i]) + " ";
 	}
 	return str;
 }
@@ -126,24 +129,40 @@ void Board::doMove(Direction direction) {
 	}
 	if (moved) {
 		populate();
+		updateGameOverStatus();
 	}
 }
 
-bool Board::isGameOver() {
+void Board::updateGameOverStatus() {
 	size_t sizeOfTiles = tiles.size();
 	for (size_t i = 0; i < sizeOfTiles; i++) {
 		if (tiles[i] == 0) {
-			return false;
+			gameOverStatus = false;
+			return;
 		}
 	}
 	for (size_t i = 0; i < sizeOfTiles; i++) {
 		size_t belowIndex = i + width;
 		if (belowIndex < sizeOfTiles && tiles[i] == tiles[belowIndex]) {
-			return false;
+			gameOverStatus = false;
+			return;
 		}
 		if (i % width != width - 1 && (i + 1) < sizeOfTiles && tiles[i] == tiles[i + 1]) {
-			return false;
+			gameOverStatus = false;
+			return;
 		}
 	}
-	return true;
+	gameOverStatus = true;
+}
+
+uint64_t Board::getScore() {
+	uint64_t score = 0;
+	for (auto& value : tiles) {
+		score += value;
+	}
+	return score;
+}
+
+bool Board::getGameOverStatus() {
+	return gameOverStatus;
 }

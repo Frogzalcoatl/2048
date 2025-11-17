@@ -4,14 +4,15 @@
 #include <functional>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
-#include "2048/game/board.hpp"
+
+class Game2048;
 
 class KeyboardInput {
 private:
 	std::unordered_map<sf::Keyboard::Scancode, bool> isPressed = {
+		{sf::Keyboard::Scancode::Escape, false},
 	    {sf::Keyboard::Scancode::F, false},
 	    {sf::Keyboard::Scancode::T, false},
-	    {sf::Keyboard::Scancode::R, false},
 	    {sf::Keyboard::Scancode::Up, false},
 	    {sf::Keyboard::Scancode::W, false},
 	    {sf::Keyboard::Scancode::Down, false},
@@ -21,9 +22,7 @@ private:
 	    {sf::Keyboard::Scancode::Left, false},
 	    {sf::Keyboard::Scancode::A, false}};
 
-	void runScancode(const sf::Keyboard::Scancode scancode, Board* board);
-
 public:
-	void pressed(const sf::Event::KeyPressed* keyPressed, Board* board);
+	std::optional<sf::Keyboard::Scancode> pressed(const sf::Event::KeyPressed* keyPressed);
 	void released(const sf::Event::KeyReleased* keyReleased);
 };
