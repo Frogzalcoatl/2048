@@ -11,6 +11,8 @@ Game2048::Game2048(size_t boardWidth, size_t boardHeight)
 	window.setIcon(assets.icon);
 	window.setVerticalSyncEnabled(true);
 	setUIScreen(UIScreenTypes::Menu);
+	assets.loadMusic("./assets/music/moog_city.ogg");
+	assets.playMusic();
 }
 
 void Game2048::run() {
