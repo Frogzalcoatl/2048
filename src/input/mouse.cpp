@@ -1,5 +1,5 @@
 #include <SFML/Window/Mouse.hpp>
-#include "2048/input/Mouse.hpp"
+#include "2048/input/mouse.hpp"
 using namespace std;
 
 void MouseInput::update() {
