@@ -1,4 +1,4 @@
-#include "2048/ui/Element.hpp"
+#include "2048/ui/element.hpp"
 #include <SFML/Graphics.hpp>
 using namespace std;
 
