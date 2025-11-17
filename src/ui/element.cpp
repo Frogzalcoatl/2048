@@ -127,7 +127,7 @@ void UIElement::centerInWindow(sf::RenderWindow& window, Axis axis) {
 	centerTextInBackground(Axis::XY);
 }
 
-void UIElement::moveTextPositionBy(sf::Vector2f& amount) {
+void UIElement::moveTextPositionBy(const sf::Vector2f& amount) {
 	if (!text.has_value()) {
 		return;
 	}

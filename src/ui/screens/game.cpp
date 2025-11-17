@@ -21,8 +21,8 @@ GameScreen::GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& boar
         nullopt,
         sf::RectangleShape{{1920.f, 1080.f}}
 	} {
-	score.moveTextPositionBy(sf::Vector2f{0.f, 10.f});
-	highScore.moveTextPositionBy(sf::Vector2f{0.f, 10.f});
+	score.moveTextPositionBy({0.f, 10.f});
+	highScore.moveTextPositionBy({0.f, 10.f});
     // Must explicitly state types in make_unique since template functions cant recogize types just from {}.
 	elements.push_back(
         make_unique<UIElement>(

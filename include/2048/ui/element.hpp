@@ -38,7 +38,7 @@ public:
 	std::optional<std::string> getText();
 	void draw(sf::RenderWindow& window);
 	void centerInWindow(sf::RenderWindow& window, Axis axis);
-	void moveTextPositionBy(sf::Vector2f& amount);
+	void moveTextPositionBy(const sf::Vector2f& amount);
 	void centerTextInBackground(Axis axis);
 
 protected:

@@ -15,16 +15,16 @@ MenuScreen::MenuScreen(const GameAssets& assets, sf::RenderWindow& window) {
         make_unique<UIElement>(
 			sf::Vector2f{100.f, 0.f},
 			UIElementColorParams{sf::Color{0x786E65FF}},
-            UIElementTextParams{"2048", &assets.boldFont, 150}
+            UIElementTextParams{"2048", &assets.boldFont, 300}
 		)
     );
     elements.back().get()->centerInWindow(window, Axis::X);
     elements.push_back(
         make_unique<UIElement>(
-            sf::Vector2f{0.f, 375.f},
+            sf::Vector2f{0.f, 450.f},
             UIElementColorParams{nullopt, sf::Color{0xBBADA0FF}},
             nullopt,
-            sf::RectangleShape{{500.f, 250.f}}
+            sf::RectangleShape{{475.f, 300.f}}
         )
     );
     elements.back().get()->centerInWindow(window, Axis::X);
@@ -34,7 +34,7 @@ MenuScreen::MenuScreen(const GameAssets& assets, sf::RenderWindow& window) {
             []() {
                 return ScreenResult{ScreenAction::ChangeScreen, UIScreenTypes::Game};
             },
-            sf::Vector2f{0.f, 400.f},
+            sf::Vector2f{0.f, 500.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
             UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x726151FF}},
             UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
@@ -48,7 +48,7 @@ MenuScreen::MenuScreen(const GameAssets& assets, sf::RenderWindow& window) {
             []() {
                 return ScreenResult{ScreenAction::ExitGame};
             },
-            sf::Vector2f{0.f, 525.f},
+            sf::Vector2f{0.f, 625.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
             UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x726151FF}},
             UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
