@@ -1,6 +1,18 @@
 #include "2048/ui/button.hpp"
 using namespace std;
 
+namespace CursorManager {
+	sf::Cursor& getHoveredCursor() {
+		static sf::Cursor cursor = sf::Cursor(sf::Cursor::Type::Hand);
+		return cursor;
+	}
+
+	sf::Cursor& getNormalCursor() {
+		static sf::Cursor cursor = sf::Cursor(sf::Cursor::Type::Arrow);
+		return cursor;
+	}
+}
+
 Button::Button(
 	function<ScreenResult()> onClick, const sf::Vector2f& pos, const UIElementColorParams& normalColors, const UIElementColorParams& hoveredColors, const UIElementColorParams& clickedColors, 
 	optional<UIElementTextParams> textParams, optional<sf::RectangleShape> background
@@ -35,12 +47,12 @@ ScreenResult Button::update(MouseInput& mouseInput, sf::RenderWindow& window) {
 	sf::Vector2i mousePos = mouseInput.getPos();
 	bool mouseIsWithinBounds = elementBounds.contains({static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)});
 	if (mouseIsWithinBounds) {
-		window.setMouseCursor(cursorHovered);
+		window.setMouseCursor(CursorManager::getHoveredCursor());
 	}
 	bool leftClickPressed = mouseInput.isLeftClickDown();
 	bool leftClickReleased = mouseInput.wasLeftClickReleased();
 	if (mouseIsWithinBounds) {
-		window.setMouseCursor(cursorHovered);
+		window.setMouseCursor(CursorManager::getHoveredCursor());
 		bool leftClickPressed = mouseInput.isLeftClickDown();
 		bool leftClickReleased = mouseInput.wasLeftClickReleased();
 		if (leftClickPressed) {

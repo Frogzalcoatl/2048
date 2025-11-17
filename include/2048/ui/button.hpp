@@ -22,5 +22,7 @@ private:
 	void updateColors(UIElementColorParams& colors);
 };
 
-inline sf::Cursor cursorHovered{sf::Cursor::Type::Hand};
-inline sf::Cursor cursorNormal{sf::Cursor::Type::Arrow};
+namespace CursorManager {
+	sf::Cursor& getHoveredCursor();
+	sf::Cursor& getNormalCursor();
+}
