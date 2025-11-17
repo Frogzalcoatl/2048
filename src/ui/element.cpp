@@ -12,7 +12,7 @@ void UIElement::centerTextInBackground() {
 	text->setPosition({(absoluteBackgroundCenter.x - textSize.x / 2.f), (absoluteBackgroundCenter.y - textSize.y / 2.f - 10.f)});
 }
 
-UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, std::optional<UIElementTextParams> textParams, std::optional<sf::RectangleShape> background) 
+UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, optional<UIElementTextParams> textParams, optional<sf::RectangleShape> background) 
 	: background{background} {
 	if (!background.has_value() && !textParams.has_value()) {
 		this->~UIElement();

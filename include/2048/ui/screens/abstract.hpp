@@ -3,6 +3,8 @@
 #include <vector>
 #include "2048/ui/element.hpp"
 #include "2048/input/mouse.hpp"
+#include <memory>
+#include <optional>
 
 enum class ScreenAction {
 	None,

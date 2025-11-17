@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <optional>
 #include <SFML/Graphics.hpp>
 #include "2048/ui/element.hpp"
 #include "2048/input/mouse.hpp"

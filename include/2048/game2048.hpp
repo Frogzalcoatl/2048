@@ -4,6 +4,7 @@
 #include "2048/input/mouse.hpp"
 #include "2048/ui/assets.hpp"
 #include "2048/ui/screens/base.hpp"
+#include <memory>
 
 class Game2048 {
 public:

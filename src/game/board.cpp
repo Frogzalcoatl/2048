@@ -56,7 +56,7 @@ string Board::getDebugString() {
 	return str;
 }
 
-const std::vector<uint64_t>& Board::getTiles() const {
+const vector<uint64_t>& Board::getTiles() const {
 	return tiles;
 }
 
