@@ -3,7 +3,7 @@
 using namespace std;
 
 ScreenResult UIScreen::draw(MouseInput& mouseInput, sf::RenderWindow& window) {
-    window.setMouseCursor(cursorNormal);
+    window.setMouseCursor(CursorManager::getNormalCursor());
     ScreenResult finalResult{};
     for (auto& element : elements) {
         if (Button* button = dynamic_cast<Button*>(element.get())) {
