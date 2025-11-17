@@ -4,6 +4,7 @@
 using namespace std;
 
 int main() {
-	Game2048 game{4, 4};
-	game.run();
+	Game2048* game = new Game2048{4, 4};
+	game->run();
+	delete game;
 }

@@ -12,7 +12,6 @@ private:
 	std::unordered_map<sf::Keyboard::Scancode, bool> isPressed = {
 		{sf::Keyboard::Scancode::Escape, false},
 	    {sf::Keyboard::Scancode::F, false},
-	    {sf::Keyboard::Scancode::T, false},
 	    {sf::Keyboard::Scancode::Up, false},
 	    {sf::Keyboard::Scancode::W, false},
 	    {sf::Keyboard::Scancode::Down, false},

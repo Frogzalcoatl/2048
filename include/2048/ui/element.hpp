@@ -35,11 +35,13 @@ public:
 	void setFont(sf::Font* font);
 	void setFontSize(unsigned int fontSize);
 	void setText(std::string newText);
+	std::optional<std::string> getText();
 	void draw(sf::RenderWindow& window);
 	void centerInWindow(sf::RenderWindow& window, Axis axis);
+	void moveTextPositionBy(sf::Vector2f& amount);
+	void centerTextInBackground(Axis axis);
 
 protected:
 	std::optional<sf::RectangleShape> background;
 	std::optional<sf::Text> text;
-	void centerTextInBackground();
 };

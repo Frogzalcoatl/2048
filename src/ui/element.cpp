@@ -2,14 +2,21 @@
 #include <SFML/Graphics.hpp>
 using namespace std;
 
-void UIElement::centerTextInBackground() {
+void UIElement::centerTextInBackground(Axis axis) {
 	if (!background.has_value() || !text.has_value()) {
 		return;
 	}
 	sf::Vector2f absoluteBackgroundCenter = background->getGlobalBounds().getCenter();
 	sf::Vector2f textSize = text->getLocalBounds().size;
-	// -10.f since the font seems to have some extra transparent height. Probably a better way to fix in the future.
-	text->setPosition({(absoluteBackgroundCenter.x - textSize.x / 2.f), (absoluteBackgroundCenter.y - textSize.y / 2.f - 10.f)});
+	sf::Vector2f newPosition = text->getPosition();
+	if (axis == Axis::X || axis == Axis::XY) {
+		newPosition.x = absoluteBackgroundCenter.x - textSize.x / 2.f;
+	}
+	if (axis == Axis::Y || axis == Axis::XY) {
+		// -10.f for now since the font seems to have some extra transparent height. Probably a better way to fix in the future.
+		newPosition.y = absoluteBackgroundCenter.y - textSize.y / 2.f - 10.f;
+	}
+	text->setPosition(newPosition);
 }
 
 UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, optional<UIElementTextParams> textParams, optional<sf::RectangleShape> background) 
@@ -30,13 +37,13 @@ UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors
 			text->setFillColor(*colors.text);
 		}
 	}
-	centerTextInBackground();
+	centerTextInBackground(Axis::XY);
 }
 
 void UIElement::setPosition(const sf::Vector2f& pos) {
 	if (background.has_value()) {
 		background->setPosition(pos);
-		centerTextInBackground();
+		centerTextInBackground(Axis::XY);
 	} else {
 		if (text.has_value()) {
 			text->setPosition(pos);
@@ -53,7 +60,7 @@ void UIElement::setBackgroundColor(const sf::Color& color) {
 void UIElement::setBackgroundSize(sf::Vector2f size) {
 	if (background.has_value()) {
 		background->setSize(size);
-		centerTextInBackground();
+		centerTextInBackground(Axis::XY);
 	}
 }
 
@@ -78,6 +85,14 @@ void UIElement::setFontSize(unsigned int fontSize) {
 void UIElement::setText(string newText) {
 	if (text.has_value()) {
 		text->setString(newText);
+	}
+}
+
+optional<string> UIElement::getText() {
+	if (text.has_value()) {
+		return text->getString().toAnsiString();
+	} else {
+		return nullopt;
 	}
 }
 
@@ -109,5 +124,15 @@ void UIElement::centerInWindow(sf::RenderWindow& window, Axis axis) {
 		position.y = window.getSize().y / 2.f - elementSize.y / 2.f;
 	}
 	setPosition(position);
-	centerTextInBackground();
+	centerTextInBackground(Axis::XY);
+}
+
+void UIElement::moveTextPositionBy(sf::Vector2f& amount) {
+	if (!text.has_value()) {
+		return;
+	}
+	sf::Vector2f textPosition = text->getPosition();
+	textPosition.x += amount.x;
+	textPosition.y += amount.y;
+	text->setPosition(textPosition);
 }

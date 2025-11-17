@@ -13,6 +13,7 @@ Game2048::Game2048(size_t boardWidth, size_t boardHeight)
 }
 
 void Game2048::run() {
+	const sf::Color backgroundColor{0xFAF8EFFF};
 	while (window.isOpen()) {
 		while (const optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
@@ -27,7 +28,7 @@ void Game2048::run() {
 			}
 		}
 		mouseInput.update();
-		window.clear();
+		window.clear(backgroundColor);
 		draw();
 		window.display();
 	}
@@ -60,15 +61,24 @@ void Game2048::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
 }
 
 void Game2048::handleScreenResult(ScreenResult result) {
+	GameScreen* gameScreen = dynamic_cast<GameScreen*>(currentUIScreen.get());
 	if (result.action == ScreenAction::ExitGame) {
 		window.close();
 	}
 	if (result.action == ScreenAction::ChangeScreen && result.type.has_value()) {
 		setUIScreen(*result.type);
+		if (GameScreen* gameScreen = dynamic_cast<GameScreen*>(currentUIScreen.get())) {
+			gameScreen->setScore(board.getScore());
+		}
 	}
 	if (result.action == ScreenAction::ResetGame) {
 		board.reset();
 		board.populate();
 		board.populate();
+	}
+	if (result.action == ScreenAction::UpdateScore || result.action == ScreenAction::ResetGame) {
+		if (GameScreen* gameScreen = dynamic_cast<GameScreen*>(currentUIScreen.get())) {
+			gameScreen->setScore(board.getScore());
+		}
 	}
 }

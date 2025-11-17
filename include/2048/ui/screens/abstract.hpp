@@ -10,7 +10,8 @@ enum class ScreenAction {
 	None,
 	ChangeScreen,
 	ExitGame,
-	ResetGame
+	ResetGame,
+	UpdateScore
 };
 
 enum UIScreenTypes {

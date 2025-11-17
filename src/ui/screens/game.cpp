@@ -1,44 +1,39 @@
 #include "2048/ui/screens/game.hpp"
 #include "2048/ui/button.hpp"
-#include <iostream>
+#include "2048/game/stringToInt.hpp"
 using namespace std;
 
-GameScreen::GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& board) : board{board}, assets{assets}, boardRenderer{&assets, board.width, board.height} {
+GameScreen::GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& board) 
+	: board{board}, assets{assets}, boardRenderer{&assets, board.width, board.height},
+	score{
+		sf::Vector2f{938.f, 30.f},
+        UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0xBBADA0FF}},
+        UIElementTextParams{"0", &assets.boldFont, 28},
+        sf::RectangleShape{{200.f, 70.f}}
+	}, highScore{
+		sf::Vector2f{1154.f, 30.f},
+        UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0xBBADA0FF}},
+        UIElementTextParams{"0", &assets.boldFont, 28},
+        sf::RectangleShape{{200.f, 70.f}}
+	}, background{
+		sf::Vector2f{0.f, 0.f},
+        UIElementColorParams{nullopt, sf::Color{0xFAF8EFFF}},
+        nullopt,
+        sf::RectangleShape{{1920.f, 1080.f}}
+	} {
+	score.moveTextPositionBy(sf::Vector2f{0.f, 10.f});
+	highScore.moveTextPositionBy(sf::Vector2f{0.f, 10.f});
     // Must explicitly state types in make_unique since template functions cant recogize types just from {}.
-    elements.push_back(
-        make_unique<UIElement>(
-            sf::Vector2f{0.f, 0.f},
-            UIElementColorParams{nullopt, sf::Color{0xFAF8EFFF}},
-            nullopt,
-            sf::RectangleShape{{1920.f, 1080.f}}
-        )
-    );
 	elements.push_back(
         make_unique<UIElement>(
-            sf::Vector2f{938.f, 30.f},
-            UIElementColorParams{nullopt, sf::Color{0xBBADA0FF}},
-            nullopt,
-            sf::RectangleShape{{200.f, 70.f}}
-        )
-    );
-	elements.push_back(
-        make_unique<UIElement>(
-			sf::Vector2f{1005.f, 35.f},
+			sf::Vector2f{1006.f, 35.f},
 			UIElementColorParams{sf::Color{0xEEE4D4FF}},
 			UIElementTextParams{"SCORE", &assets.boldFont, 22}
 		)
     );
 	elements.push_back(
         make_unique<UIElement>(
-            sf::Vector2f{1154.f, 30.f},
-            UIElementColorParams{nullopt, sf::Color{0xBBADA0FF}},
-            nullopt,
-            sf::RectangleShape{{200.f, 70.f}}
-        )
-    );
-	elements.push_back(
-        make_unique<UIElement>(
-			sf::Vector2f{1228.f, 35.f},
+			sf::Vector2f{1229.f, 35.f},
 			UIElementColorParams{sf::Color{0xEEE4D4FF}},
 			UIElementTextParams{"BEST", &assets.boldFont, 22}
 		)
@@ -94,25 +89,25 @@ ScreenResult GameScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
             board.testFill();
 			board.updateGameOverStatus();
 		}; break;
-		case sf::Keyboard::Scancode::T: {
-			board.updateGameOverStatus();
-			cout << boolalpha << board.getGameOverStatus() << endl;
-		}; break;
 		case sf::Keyboard::Scancode::Up:
 		case sf::Keyboard::Scancode::W: {
 			board.doMove(Direction::Up);
+			return ScreenResult{ScreenAction::UpdateScore};
 		}; break;
 		case sf::Keyboard::Scancode::Down:
 		case sf::Keyboard::Scancode::S: {
 			board.doMove(Direction::Down);
+			return ScreenResult{ScreenAction::UpdateScore};
 		}; break;
 		case sf::Keyboard::Scancode::Right:
 		case sf::Keyboard::Scancode::D: {
 			board.doMove(Direction::Right);
+			return ScreenResult{ScreenAction::UpdateScore};
 		}; break;
 		case sf::Keyboard::Scancode::Left:
 		case sf::Keyboard::Scancode::A: {
 			board.doMove(Direction::Left);
+			return ScreenResult{ScreenAction::UpdateScore};
 		}; break;
 		default: break;
 	}
@@ -120,7 +115,10 @@ ScreenResult GameScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
 }
 
 ScreenResult GameScreen::draw(MouseInput& mouseInput, sf::RenderWindow& window) {
-	ScreenResult finalResult = UIScreen::draw(mouseInput, window);
+	background.draw(window);
+	score.draw(window);
+	highScore.draw(window);
+	ScreenResult buttonResult = UIScreen::draw(mouseInput, window);
 	boardRenderer.render(window, board);
 	bool isGameOver = board.getGameOverStatus();
 	if (isGameOver) {
@@ -130,5 +128,19 @@ ScreenResult GameScreen::draw(MouseInput& mouseInput, sf::RenderWindow& window) 
 		gameOver.setFillColor(sf::Color::Black);
 		window.draw(gameOver);
 	}
-	return finalResult;
+	return buttonResult;
+}
+
+void GameScreen::setScore(uint64_t newScore) {
+	score.setText(to_string(newScore));
+	score.centerTextInBackground(Axis::X);
+	auto highScoreText = highScore.getText();
+	if (!highScoreText.has_value()) {
+		return;
+	}
+	uint64_t highScoreNum = stringToUInt64(*highScoreText);
+	if (newScore > highScoreNum) {
+		highScore.setText(to_string(newScore));
+		highScore.centerTextInBackground(Axis::X);
+	}
 }
