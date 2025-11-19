@@ -9,9 +9,11 @@ using namespace std;
 const string FOLDER_NAME = "data";
 const string FILE_PATH = FOLDER_NAME + "/highscore.txt";
 
-uint64_t ScoreStorage::loadHighScore() {
+uint64_t ScoreStorage::loadHighScore(Board& board) {
     if (!filesystem::exists(FILE_PATH)) {
-        return 0;
+        uint64_t currentScore = board.getScore();
+        saveHighScore(currentScore);
+        return currentScore;
     }
     ifstream file(FILE_PATH);
     string fileContent;

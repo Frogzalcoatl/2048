@@ -15,7 +15,7 @@ GameScreen::GameScreen(sf::RenderWindow& window, Board& board)
 	}, highScore{
 		sf::Vector2f{1154.f, 30.f},
         UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0xBBADA0FF}},
-        UIElementTextParams{to_string(ScoreStorage::loadHighScore()), &Assets2048::boldFont, 28},
+        UIElementTextParams{to_string(ScoreStorage::loadHighScore(board)), &Assets2048::boldFont, 28},
         sf::RectangleShape{{200.f, 70.f}}
 	} {
 	score.moveTextPositionBy({0.f, 10.f});
