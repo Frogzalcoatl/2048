@@ -25,6 +25,26 @@ void Game2048::run() {
 				}
 			} else if (const auto keyReleased = event->getIf<sf::Event::KeyReleased>()) {
 				keyboardInput.released(keyReleased);
+			} else if (const auto resized = event->getIf<sf::Event::Resized>()) {
+    			const sf::Vector2f designResolution(1920.f, 1080.f);
+    			float windowWidth = static_cast<float>(resized->size.x);
+    			float windowHeight = static_cast<float>(resized->size.y);
+    			float designAspectRatio = designResolution.x / designResolution.y;
+    			float windowAspectRatio = windowWidth / windowHeight;
+    			float viewportX = 0.f;
+    			float viewportY = 0.f;
+    			float viewportWidth = 1.f;
+    			float viewportHeight = 1.f;
+    			if (windowAspectRatio > designAspectRatio) {
+    			    viewportWidth = designAspectRatio / windowAspectRatio;
+    			    viewportX = (1.f - viewportWidth) / 2.f;
+    			} else if (windowAspectRatio < designAspectRatio) {
+    			    viewportHeight = windowAspectRatio / designAspectRatio;
+    			    viewportY = (1.f - viewportHeight) / 2.f;
+    			}
+    			sf::View view(designResolution / 2.f, designResolution);
+    			view.setViewport(sf::FloatRect({viewportX, viewportY}, {viewportWidth, viewportHeight}));
+    			window.setView(view);
 			}
 		}
 		mouseInput.update(window);

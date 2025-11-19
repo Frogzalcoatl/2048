@@ -3,10 +3,7 @@
 using namespace std;
 
 void MouseInput::update(sf::RenderWindow& window) {
-	sf::Vector2i windowPos = window.getPosition();
-	mousePos = sf::Mouse::getPosition();
-	mousePos.x -= windowPos.x;
-	mousePos.y -= windowPos.y;
+	mousePos = sf::Mouse::getPosition(window);
 	bool leftClickDownLastTick = leftClickDown;
 	leftClickDown = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
 	if (leftClickDownLastTick && !leftClickDown) {

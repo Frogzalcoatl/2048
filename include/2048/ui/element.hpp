@@ -27,7 +27,6 @@ public:
 	virtual ~UIElement() {}
 
 	UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, std::optional<UIElementTextParams> textParams, std::optional<sf::RectangleShape> background = std::nullopt);
-
 	void setPosition(const sf::Vector2f& pos);
 	void setBackgroundColor(const sf::Color& color);
 	void setBackgroundSize(const sf::Vector2f size);

@@ -23,6 +23,7 @@ set(SOURCES
     src/ui/assets.cpp
     src/ui/boardRenderer.cpp
     src/ui/button.cpp
+    src/ui/cursorManager.cpp
     src/ui/element.cpp
     src/ui/screens/base.cpp
     src/ui/screens/game.cpp

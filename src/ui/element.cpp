@@ -13,21 +13,21 @@ void UIElement::centerTextInBackground(Axis axis) {
 		newPosition.x = absoluteBackgroundCenter.x - textSize.x / 2.f;
 	}
 	if (axis == Axis::Y || axis == Axis::XY) {
-		// -10.f for now since the font seems to have some extra transparent height. Probably a better way to fix in the future.
+		// -10.f for now since the font seems to have some extra transparent height. Theres probably a better way to fix in the future.
 		newPosition.y = absoluteBackgroundCenter.y - textSize.y / 2.f - 10.f;
 	}
 	text->setPosition(newPosition);
 }
 
-UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, optional<UIElementTextParams> textParams, optional<sf::RectangleShape> background) 
-	: background{background} {
-	if (!background.has_value() && !textParams.has_value()) {
+UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, optional<UIElementTextParams> textParams, optional<sf::RectangleShape> backgroundInput) 
+	: background{backgroundInput} {
+	if (!backgroundInput.has_value() && !textParams.has_value()) {
 		this->~UIElement();
 	}
-	if (this->background.has_value()) {
-		this->background->setPosition(pos);
+	if (background.has_value()) {
+		background->setPosition(pos);
 		if (colors.background.has_value()) {
-			this->background->setFillColor(*colors.background);
+			background->setFillColor(*colors.background);
 		}
 	}
 	if (textParams.has_value()) {
@@ -98,17 +98,9 @@ optional<string> UIElement::getText() {
 
 void UIElement::draw(sf::RenderWindow& window) {
 	if (background.has_value()) {
-		sf::Vector2f backgroundPosition = background->getPosition();
-		background->setPosition(
-			window.mapPixelToCoords(sf::Vector2i{static_cast<int>(backgroundPosition.x), static_cast<int>(backgroundPosition.y)})
-		);
 		window.draw(*background);
 	}
 	if (text.has_value()) {
-		sf::Vector2f textPosition = text->getPosition();
-		text->setPosition(
-			window.mapPixelToCoords(sf::Vector2i{static_cast<int>(textPosition.x), static_cast<int>(textPosition.y)})
-		);
 		window.draw(*text);
 	}
 }
