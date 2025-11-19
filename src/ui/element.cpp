@@ -19,15 +19,15 @@ void UIElement::centerTextInBackground(Axis axis) {
 	text->setPosition(newPosition);
 }
 
-UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, optional<UIElementTextParams> textParams, optional<sf::RectangleShape> background) 
-	: background{background} {
-	if (!background.has_value() && !textParams.has_value()) {
+UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, optional<UIElementTextParams> textParams, optional<sf::RectangleShape> backgroundArg) 
+	: background{backgroundArg} {
+	if (!backgroundArg.has_value() && !textParams.has_value()) {
 		this->~UIElement();
 	}
-	if (this->background.has_value()) {
-		this->background->setPosition(pos);
+	if (background.has_value()) {
+		background->setPosition(pos);
 		if (colors.background.has_value()) {
-			this->background->setFillColor(*colors.background);
+			background->setFillColor(*colors.background);
 		}
 	}
 	if (textParams.has_value()) {
