@@ -21,15 +21,19 @@ static void resizeView(const sf::Window& window, sf::View& view) {
     view.setViewport(sf::FloatRect({posX, posY}, {sizeX, sizeY}));
 }
 
-Game2048::Game2048(size_t boardWidth, size_t boardHeight)
-    : window{sf::VideoMode::getDesktopMode(), "2048", sf::Style::Default}, board{boardWidth, boardHeight, 2},
-	backgroundColor{0xFAF8EFFF}, keyboardInput{}, mouseInput{} {
-	assets.loadAll();
+void Game2048::applyWindowSettings() {
 	window.setIcon(assets.icon);
 	window.setVerticalSyncEnabled(true);
 	sf::View view(sf::FloatRect({0.f, 0.f}, {1920.f, 1080.f}));
     resizeView(window, view);
     window.setView(view);
+}
+
+Game2048::Game2048(size_t boardWidth, size_t boardHeight)
+    : window{sf::VideoMode{{1280, 720}}, "2048", sf::Style::Default}, board{boardWidth, boardHeight, 2},
+	backgroundColor{0xFAF8EFFF}, keyboardInput{}, mouseInput{} {
+	assets.loadAll();
+	applyWindowSettings();
 	setUIScreen(UIScreenTypes::Menu);
 	//assets.loadMusic("./assets/music/moog_city.ogg");
 	//assets.playMusic();
@@ -77,34 +81,50 @@ void Game2048::setUIScreen(UIScreenTypes screen) {
 
 void Game2048::draw() {
 	auto screen = currentUIScreen.get();
-	ScreenResult result = screen->draw(mouseInput, window);
+	InputActionResult result = screen->draw(mouseInput, window);
 	handleScreenResult(result);
 }
 
 void Game2048::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
-	ScreenResult result = currentUIScreen.get()->handleKeyboardInput(scancode);
+	InputActionResult result = currentUIScreen.get()->handleKeyboardInput(scancode);
 	handleScreenResult(result);
 }
 
-void Game2048::handleScreenResult(ScreenResult result) {
+void Game2048::handleScreenResult(InputActionResult result) {
 	GameScreen* gameScreen = dynamic_cast<GameScreen*>(currentUIScreen.get());
-	if (result.action == ScreenAction::ExitGame) {
+	if (result.action == InputAction::ExitGame) {
 		window.close();
 	}
-	if (result.action == ScreenAction::ChangeScreen && result.type.has_value()) {
-		setUIScreen(*result.type);
+	if (result.action == InputAction::ChangeScreen && result.screenType.has_value()) {
+		setUIScreen(*result.screenType);
 		if (GameScreen* gameScreen = dynamic_cast<GameScreen*>(currentUIScreen.get())) {
 			gameScreen->setScore(board.getScore());
 		}
 	}
-	if (result.action == ScreenAction::ResetGame) {
+	if (result.action == InputAction::ResetGame) {
 		board.reset();
 		board.populate();
 		board.populate();
 	}
-	if (result.action == ScreenAction::UpdateScore || result.action == ScreenAction::ResetGame) {
+	if (result.action == InputAction::UpdateScore || result.action == InputAction::ResetGame) {
 		if (GameScreen* gameScreen = dynamic_cast<GameScreen*>(currentUIScreen.get())) {
 			gameScreen->setScore(board.getScore());
 		}
 	}
+	if (result.action == InputAction::ToggleFullscreen) {
+		toggleFullScreen();
+	}
+}
+
+void Game2048::toggleFullScreen() {
+	isFullscreen = !isFullscreen;
+	if (isFullscreen) {
+		windowResolutionBeforeFullscreen = window.getSize();
+		windowPositionBeforeFullscreen = window.getPosition();
+		window.create(sf::VideoMode::getDesktopMode(), "2048", sf::Style::None, sf::State::Fullscreen);
+	} else {
+		window.create(sf::VideoMode(windowResolutionBeforeFullscreen), "2048", sf::Style::Default);
+		window.setPosition(windowPositionBeforeFullscreen);
+	}
+	applyWindowSettings();
 }

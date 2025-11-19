@@ -3,7 +3,7 @@
 using namespace std;
 
 Button::Button(
-	function<ScreenResult()> onClick, const sf::Vector2f& pos, const UIElementColorParams& normalColors, const UIElementColorParams& hoveredColors, const UIElementColorParams& clickedColors, 
+	function<InputActionResult()> onClick, const sf::Vector2f& pos, const UIElementColorParams& normalColors, const UIElementColorParams& hoveredColors, const UIElementColorParams& clickedColors, 
 	optional<UIElementTextParams> textParams, optional<sf::RectangleShape> background
 ) : UIElement(pos, normalColors, textParams, background), onClick(onClick), normal(normalColors), hovered(hoveredColors), clicked(clickedColors) {}
 
@@ -24,14 +24,14 @@ void Button::updateColors(UIElementColorParams& colors) {
 	}
 }
 
-ScreenResult Button::update(MouseInput& mouseInput, sf::RenderWindow& window) {
+InputActionResult Button::update(MouseInput& mouseInput, sf::RenderWindow& window) {
 	sf::FloatRect elementBounds;
 	if (background.has_value()) {
 		elementBounds = background->getGlobalBounds();
 	} else if (text.has_value()) {
 		elementBounds = text->getGlobalBounds();
 	} else {
-		return ScreenResult{};
+		return InputActionResult{};
 	}
 	sf::Vector2i mousePixelPos = mouseInput.getPos();
     sf::Vector2f mouseWorldPos = window.mapPixelToCoords(mousePixelPos);
@@ -53,5 +53,5 @@ ScreenResult Button::update(MouseInput& mouseInput, sf::RenderWindow& window) {
 	} else {
 		updateColors(normal);
 	}
-	return ScreenResult{};
+	return InputActionResult{};
 }

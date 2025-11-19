@@ -7,5 +7,4 @@ int main() {
 	Game2048* game = new Game2048{4, 4};
 	game->run();
 	delete game;
-
 }

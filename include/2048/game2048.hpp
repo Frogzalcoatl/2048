@@ -17,9 +17,13 @@ private:
 	void setUIScreen(UIScreenTypes screen);
 	void draw();
 	void handleKeyboardInput(sf::Keyboard::Scancode scancode);
-	void handleScreenResult(ScreenResult result);
+	void handleScreenResult(InputActionResult result);
+	void applyWindowSettings();
+	void toggleFullScreen();
 	sf::RenderWindow window;
-	sf::VideoMode desktopMode;
+	bool isFullscreen = false;
+	sf::Vector2u windowResolutionBeforeFullscreen = {0, 0};
+	sf::Vector2i windowPositionBeforeFullscreen = {0, 0};
 	Board board;
 	KeyboardInput keyboardInput;
 	MouseInput mouseInput;

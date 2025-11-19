@@ -3,6 +3,6 @@
 
 class UIScreen : public UIScreenAbstract {
 public:
-	virtual ScreenResult draw(MouseInput& mouseInput, sf::RenderWindow& window) override;
-    virtual ScreenResult handleKeyboardInput(sf::Keyboard::Scancode scancode) override = 0;
+	virtual InputActionResult draw(MouseInput& mouseInput, sf::RenderWindow& window) override;
+    virtual InputActionResult handleKeyboardInput(sf::Keyboard::Scancode scancode) override;
 };

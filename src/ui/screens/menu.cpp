@@ -32,7 +32,7 @@ MenuScreen::MenuScreen(const GameAssets& assets, sf::RenderWindow& window) {
     elements.push_back(
         make_unique<Button>(
             []() {
-                return ScreenResult{ScreenAction::ChangeScreen, UIScreenTypes::Game};
+                return InputActionResult{InputAction::ChangeScreen, UIScreenTypes::Game};
             },
             sf::Vector2f{0.f, 500.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
@@ -46,7 +46,7 @@ MenuScreen::MenuScreen(const GameAssets& assets, sf::RenderWindow& window) {
     elements.push_back(
         make_unique<Button>(
             []() {
-                return ScreenResult{ScreenAction::ExitGame};
+                return InputActionResult{InputAction::ExitGame};
             },
             sf::Vector2f{0.f, 625.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
@@ -58,11 +58,17 @@ MenuScreen::MenuScreen(const GameAssets& assets, sf::RenderWindow& window) {
     );
     elements.back().get()->centerInWindow(window, Axis::X);
 }
-ScreenResult MenuScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
+InputActionResult MenuScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
+    InputActionResult baseResult = UIScreen::handleKeyboardInput(scancode);
+    if (baseResult.action != InputAction::None) {
+		return baseResult;
+	}
     switch (scancode) {
         case sf::Keyboard::Scancode::Escape: {
-            return ScreenResult{ScreenAction::ExitGame};
+            return InputActionResult{InputAction::ExitGame};
+        } break;
+        default: {
+            return InputActionResult{};
         }
     }
-    return ScreenResult{};
 }

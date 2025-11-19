@@ -9,16 +9,7 @@ class Game2048;
 
 class KeyboardInput {
 private:
-	std::unordered_map<sf::Keyboard::Scancode, bool> isPressed = {
-		{sf::Keyboard::Scancode::Escape, false},
-	    {sf::Keyboard::Scancode::Up, false},
-	    {sf::Keyboard::Scancode::W, false},
-	    {sf::Keyboard::Scancode::Down, false},
-	    {sf::Keyboard::Scancode::S, false},
-	    {sf::Keyboard::Scancode::Right, false},
-	    {sf::Keyboard::Scancode::D, false},
-	    {sf::Keyboard::Scancode::Left, false},
-	    {sf::Keyboard::Scancode::A, false}};
+	std::unordered_map<sf::Keyboard::Scancode, bool> isPressed;
 
 public:
 	std::optional<sf::Keyboard::Scancode> pressed(const sf::Event::KeyPressed* keyPressed);

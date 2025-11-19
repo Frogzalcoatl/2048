@@ -52,7 +52,7 @@ GameScreen::GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& boar
     elements.push_back(
         make_unique<Button>(
             []() {
-                return ScreenResult{ScreenAction::ChangeScreen, UIScreenTypes::Menu};
+                return InputActionResult{InputAction::ChangeScreen, UIScreenTypes::Menu};
             },
             sf::Vector2f{0.f, 965.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
@@ -66,7 +66,7 @@ GameScreen::GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& boar
 	elements.push_back(
         make_unique<Button>(
             []() {
-                return ScreenResult{ScreenAction::ResetGame};
+                return InputActionResult{InputAction::ResetGame};
             },
             sf::Vector2f{1600.f, 20.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
@@ -78,37 +78,42 @@ GameScreen::GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& boar
     );
 }
 
-ScreenResult GameScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
+InputActionResult GameScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
+	InputActionResult baseResult = UIScreen::handleKeyboardInput(scancode);
+	if (baseResult.action != InputAction::None) {
+		return baseResult;
+	}
     switch (scancode) {
 		case sf::Keyboard::Scancode::Up:
 		case sf::Keyboard::Scancode::W: {
 			board.doMove(Direction::Up);
-			return ScreenResult{ScreenAction::UpdateScore};
+			return InputActionResult{InputAction::UpdateScore};
 		}; break;
 		case sf::Keyboard::Scancode::Down:
 		case sf::Keyboard::Scancode::S: {
 			board.doMove(Direction::Down);
-			return ScreenResult{ScreenAction::UpdateScore};
+			return InputActionResult{InputAction::UpdateScore};
 		}; break;
 		case sf::Keyboard::Scancode::Right:
 		case sf::Keyboard::Scancode::D: {
 			board.doMove(Direction::Right);
-			return ScreenResult{ScreenAction::UpdateScore};
+			return InputActionResult{InputAction::UpdateScore};
 		}; break;
 		case sf::Keyboard::Scancode::Left:
 		case sf::Keyboard::Scancode::A: {
 			board.doMove(Direction::Left);
-			return ScreenResult{ScreenAction::UpdateScore};
+			return InputActionResult{InputAction::UpdateScore};
 		}; break;
-		default: break;
+		default: {
+			return InputActionResult{};
+		}
 	}
-	return ScreenResult{};
 }
 
-ScreenResult GameScreen::draw(MouseInput& mouseInput, sf::RenderWindow& window) {
+InputActionResult GameScreen::draw(MouseInput& mouseInput, sf::RenderWindow& window) {
 	score.draw(window);
 	highScore.draw(window);
-	ScreenResult buttonResult = UIScreen::draw(mouseInput, window);
+	InputActionResult buttonResult = UIScreen::draw(mouseInput, window);
 	boardRenderer.render(window, board);
 	bool isGameOver = board.getGameOverStatus();
 	if (isGameOver) {

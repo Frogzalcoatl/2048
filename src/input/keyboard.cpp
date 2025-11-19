@@ -4,12 +4,9 @@ using namespace std;
 
 optional<sf::Keyboard::Scancode> KeyboardInput::pressed(const sf::Event::KeyPressed* keyPressed) {
 	const sf::Keyboard::Scancode scancode = keyPressed->scancode;
-	if (isPressed.find(scancode) == isPressed.end()) {
-		return nullopt;
-	}
-	bool keyPressedThisTick = !isPressed[scancode];
+	bool wasPressedLastTick = isPressed[scancode];
 	isPressed[scancode] = true;
-	if (keyPressedThisTick) {
+	if (!wasPressedLastTick) {
 		return scancode;
 	} else {
 		return nullopt;
