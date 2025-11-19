@@ -9,7 +9,7 @@ GameScreen::GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& boar
 	score{
 		sf::Vector2f{938.f, 30.f},
         UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0xBBADA0FF}},
-        UIElementTextParams{"0", &assets.boldFont, 28},
+        UIElementTextParams{to_string(board.getScore()), &assets.boldFont, 28},
         sf::RectangleShape{{200.f, 70.f}}
 	}, highScore{
 		sf::Vector2f{1154.f, 30.f},

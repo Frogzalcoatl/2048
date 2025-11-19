@@ -70,9 +70,6 @@ void Game2048::handleInputResult(InputActionResult result) {
 	}
 	if (result.action == InputAction::ChangeScreen && result.screenType.has_value()) {
 		setUIScreen(*result.screenType);
-		if (GameScreen* gameScreen = dynamic_cast<GameScreen*>(currentUIScreen.get())) {
-			gameScreen->setScore(board.getScore());
-		}
 	}
 	if (result.action == InputAction::ResetGame) {
 		board.reset();
