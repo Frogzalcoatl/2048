@@ -31,7 +31,7 @@ set(SOURCES
 )
 
 if(WIN32)
-    add_executable(${PROJECT_NAME} WIN32 ${SOURCES} resources/icon.rc)
+    add_executable(${PROJECT_NAME} ${SOURCES} resources/icon.rc)
     target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics SFML::Audio SFML::Main)
 elseif(APPLE)
     add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES})

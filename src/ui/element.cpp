@@ -13,21 +13,21 @@ void UIElement::centerTextInBackground(Axis axis) {
 		newPosition.x = absoluteBackgroundCenter.x - textSize.x / 2.f;
 	}
 	if (axis == Axis::Y || axis == Axis::XY) {
-		// -10.f for now since the font seems to have some extra transparent height. Theres probably a better way to fix in the future.
+		// -10.f for now since the font seems to have some extra transparent height.
 		newPosition.y = absoluteBackgroundCenter.y - textSize.y / 2.f - 10.f;
 	}
 	text->setPosition(newPosition);
 }
 
-UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, optional<UIElementTextParams> textParams, optional<sf::RectangleShape> backgroundInput) 
-	: background{backgroundInput} {
-	if (!backgroundInput.has_value() && !textParams.has_value()) {
+UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, optional<UIElementTextParams> textParams, optional<sf::RectangleShape> background) 
+	: background{background} {
+	if (!background.has_value() && !textParams.has_value()) {
 		this->~UIElement();
 	}
-	if (background.has_value()) {
-		background->setPosition(pos);
+	if (this->background.has_value()) {
+		this->background->setPosition(pos);
 		if (colors.background.has_value()) {
-			background->setFillColor(*colors.background);
+			this->background->setFillColor(*colors.background);
 		}
 	}
 	if (textParams.has_value()) {
@@ -117,11 +117,13 @@ void UIElement::centerInWindow(sf::RenderWindow& window, Axis axis) {
 	} else {
 		return;
 	}
+    sf::Vector2f viewSize = window.getView().getSize();
+
 	if (axis == Axis::X || axis == Axis::XY) {
-		position.x = window.getSize().x / 2.f - elementSize.x / 2.f;
+		position.x = viewSize.x / 2.f - elementSize.x / 2.f;
 	}
 	if (axis == Axis::Y || axis == Axis::XY) {
-		position.y = window.getSize().y / 2.f - elementSize.y / 2.f;
+		position.y = viewSize.y / 2.f - elementSize.y / 2.f;
 	}
 	setPosition(position);
 	centerTextInBackground(Axis::XY);

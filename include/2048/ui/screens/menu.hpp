@@ -8,10 +8,4 @@ class MenuScreen : public UIScreen {
 public:
     MenuScreen(const GameAssets& assets, sf::RenderWindow& window);
     ScreenResult handleKeyboardInput(sf::Keyboard::Scancode scancode) override;
-    UIElement title;
-    UIElement buttonBackground;
-    Button playButton;
-    Button quitButton;
-private:
-    const sf::Vector2f buttonSize = {400.f, 75.f};
 };

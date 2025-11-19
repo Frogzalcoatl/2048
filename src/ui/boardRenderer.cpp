@@ -45,7 +45,7 @@ void BoardRenderer::render(sf::RenderTarget& target, const Board& board) {
     const float padding = 17.5f;
     const float boardW = boardWidth * tileSize + (boardWidth + 1) * padding;
     const float boardH = boardHeight * tileSize + (boardHeight + 1) * padding;
-    const sf::Vector2f winSize(static_cast<float>(target.getSize().x), static_cast<float>(target.getSize().y));
+    const sf::Vector2f winSize = target.getView().getSize(); 
     const sf::Vector2f boardTopLeft((winSize.x - boardW) / 2.f, (winSize.y - boardH) / 2.f);
 
     // background rounded rect - using simple rectangle for portability

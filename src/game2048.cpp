@@ -4,15 +4,35 @@
 #include "2048/ui/screens/game.hpp"
 using namespace std;
 
+static void resizeView(const sf::Window& window, sf::View& view) {
+    float windowRatio = static_cast<float>(window.getSize().x) / static_cast<float>(window.getSize().y);
+    float viewRatio = 1920.f / 1080.f; // Target 16:9
+    float sizeX = 1.f;
+    float sizeY = 1.f;
+    float posX = 0.f;
+    float posY = 0.f;
+    if (windowRatio > viewRatio) {
+        sizeX = viewRatio / windowRatio;
+        posX = (1.f - sizeX) / 2.f;
+    } else {
+        sizeY = windowRatio / viewRatio;
+        posY = (1.f - sizeY) / 2.f;
+    }
+    view.setViewport(sf::FloatRect({posX, posY}, {sizeX, sizeY}));
+}
+
 Game2048::Game2048(size_t boardWidth, size_t boardHeight)
-    : window{sf::VideoMode::getDesktopMode(), "2048", sf::Style::Titlebar | sf::Style::Close}, board{boardWidth, boardHeight, 2},
+    : window{sf::VideoMode::getDesktopMode(), "2048", sf::Style::Default}, board{boardWidth, boardHeight, 2},
 	backgroundColor{0xFAF8EFFF}, keyboardInput{}, mouseInput{} {
 	assets.loadAll();
 	window.setIcon(assets.icon);
 	window.setVerticalSyncEnabled(true);
+	sf::View view(sf::FloatRect({0.f, 0.f}, {1920.f, 1080.f}));
+    resizeView(window, view);
+    window.setView(view);
 	setUIScreen(UIScreenTypes::Menu);
-	assets.loadMusic("./assets/music/moog_city.ogg");
-	assets.playMusic();
+	//assets.loadMusic("./assets/music/moog_city.ogg");
+	//assets.playMusic();
 }
 
 void Game2048::run() {
@@ -28,25 +48,9 @@ void Game2048::run() {
 			} else if (const auto keyReleased = event->getIf<sf::Event::KeyReleased>()) {
 				keyboardInput.released(keyReleased);
 			} else if (const auto resized = event->getIf<sf::Event::Resized>()) {
-    			const sf::Vector2f designResolution(1920.f, 1080.f);
-    			float windowWidth = static_cast<float>(resized->size.x);
-    			float windowHeight = static_cast<float>(resized->size.y);
-    			float designAspectRatio = designResolution.x / designResolution.y;
-    			float windowAspectRatio = windowWidth / windowHeight;
-    			float viewportX = 0.f;
-    			float viewportY = 0.f;
-    			float viewportWidth = 1.f;
-    			float viewportHeight = 1.f;
-    			if (windowAspectRatio > designAspectRatio) {
-    			    viewportWidth = designAspectRatio / windowAspectRatio;
-    			    viewportX = (1.f - viewportWidth) / 2.f;
-    			} else if (windowAspectRatio < designAspectRatio) {
-    			    viewportHeight = windowAspectRatio / designAspectRatio;
-    			    viewportY = (1.f - viewportHeight) / 2.f;
-    			}
-    			sf::View view(designResolution / 2.f, designResolution);
-    			view.setViewport(sf::FloatRect({viewportX, viewportY}, {viewportWidth, viewportHeight}));
-    			window.setView(view);
+				sf::View view = window.getView();
+                resizeView(window, view);
+                window.setView(view);
 			}
 		}
 		mouseInput.update(window);

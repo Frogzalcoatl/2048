@@ -33,11 +33,9 @@ ScreenResult Button::update(MouseInput& mouseInput, sf::RenderWindow& window) {
 	} else {
 		return ScreenResult{};
 	}
-	sf::Vector2i mousePos = mouseInput.getPos();
-	bool mouseIsWithinBounds = elementBounds.contains({static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)});
-	if (mouseIsWithinBounds) {
-		window.setMouseCursor(CursorManager::getHoveredCursor());
-	}
+	sf::Vector2i mousePixelPos = mouseInput.getPos();
+    sf::Vector2f mouseWorldPos = window.mapPixelToCoords(mousePixelPos);
+	bool mouseIsWithinBounds = elementBounds.contains(mouseWorldPos);
 	bool leftClickPressed = mouseInput.isLeftClickDown();
 	bool leftClickReleased = mouseInput.wasLeftClickReleased();
 	if (mouseIsWithinBounds) {

@@ -15,11 +15,6 @@ GameScreen::GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& boar
         UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0xBBADA0FF}},
         UIElementTextParams{"0", &assets.boldFont, 28},
         sf::RectangleShape{{200.f, 70.f}}
-	}, background{
-		sf::Vector2f{0.f, 0.f},
-        UIElementColorParams{nullopt, sf::Color{0xFAF8EFFF}},
-        nullopt,
-        sf::RectangleShape{{1920.f, 1080.f}}
 	} {
 	score.moveTextPositionBy({0.f, 10.f});
 	highScore.moveTextPositionBy({0.f, 10.f});
@@ -111,7 +106,6 @@ ScreenResult GameScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
 }
 
 ScreenResult GameScreen::draw(MouseInput& mouseInput, sf::RenderWindow& window) {
-	background.draw(window);
 	score.draw(window);
 	highScore.draw(window);
 	ScreenResult buttonResult = UIScreen::draw(mouseInput, window);

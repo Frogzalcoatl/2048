@@ -4,7 +4,12 @@
 using namespace std;
 
 ScreenResult UIScreen::draw(MouseInput& mouseInput, sf::RenderWindow& window) {
-    window.setMouseCursor(CursorManager::getNormalCursor());
+    sf::Vector2u windowSize = window.getSize();
+    sf::Vector2i mousePos = mouseInput.getPos();
+    bool mouseIsWithinWindow = (mousePos.x > 0 && mousePos.x < windowSize.x) && (mousePos.y > 0 && mousePos.y < windowSize.y);
+    if (mouseIsWithinWindow) {
+        window.setMouseCursor(CursorManager::getNormalCursor());
+    }
     ScreenResult finalResult{};
     for (auto& element : elements) {
         if (Button* button = dynamic_cast<Button*>(element.get())) {

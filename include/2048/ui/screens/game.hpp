@@ -15,5 +15,4 @@ private:
     BoardRenderer boardRenderer;
     UIElement score;
     UIElement highScore;
-    UIElement background;
 };
