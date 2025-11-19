@@ -65,7 +65,6 @@ void Game2048::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
 }
 
 void Game2048::handleInputResult(InputActionResult result) {
-	GameScreen* gameScreen = dynamic_cast<GameScreen*>(currentUIScreen.get());
 	if (result.action == InputAction::ExitGame) {
 		windowManager.window.close();
 	}
