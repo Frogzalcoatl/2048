@@ -11,8 +11,8 @@ Game2048::Game2048(size_t boardWidth, size_t boardHeight)
 	Assets2048::loadAll();
 	windowManager.applyWindowSettings();
 	setUIScreen(UIScreenTypes::Menu);
-	//Assets2048::loadMusic("./assets/music/moog_city.ogg");
-	//Assets2048::playMusic();
+	Assets2048::loadMusic("./assets/music/moog_city.ogg");
+	Assets2048::playMusic();
 }
 
 void Game2048::run() {
