@@ -2,16 +2,17 @@
 #include "2048/game2048.hpp"
 #include "2048/ui/screens/menu.hpp"
 #include "2048/ui/screens/game.hpp"
+#include "2048/ui/assets.hpp"
 using namespace std;
 
 Game2048::Game2048(size_t boardWidth, size_t boardHeight)
     : board{boardWidth, boardHeight, 2}, backgroundColor{0xFAF8EFFF},
 	windowManager{}, keyboardInput{}, mouseInput{} {
-	assets.loadAll();
-	windowManager.applyWindowSettings(assets);
+	Assets2048::loadAll();
+	windowManager.applyWindowSettings();
 	setUIScreen(UIScreenTypes::Menu);
-	//assets.loadMusic("./assets/music/moog_city.ogg");
-	//assets.playMusic();
+	//Assets2048::loadMusic("./assets/music/moog_city.ogg");
+	//Assets2048::playMusic();
 }
 
 void Game2048::run() {
@@ -44,10 +45,10 @@ void Game2048::close() {
 void Game2048::setUIScreen(UIScreenTypes screen) {
 	switch (screen) {
 		case UIScreenTypes::Menu: {
-			currentUIScreen = make_unique<MenuScreen>(assets, windowManager.window);
+			currentUIScreen = make_unique<MenuScreen>(windowManager.window);
 		}; break;
 		case UIScreenTypes::Game: {
-			currentUIScreen = make_unique<GameScreen>(assets, windowManager.window, board);
+			currentUIScreen = make_unique<GameScreen>(windowManager.window, board);
 		}; break;
 	}
 }
@@ -80,6 +81,6 @@ void Game2048::handleInputResult(InputActionResult result) {
 		}
 	}
 	if (result.action == InputAction::ToggleFullscreen) {
-		windowManager.toggleFullScreen(assets);
+		windowManager.toggleFullScreen();
 	}
 }

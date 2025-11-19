@@ -6,6 +6,6 @@
 
 class MenuScreen : public UIScreen {
 public:
-    MenuScreen(const GameAssets& assets, sf::RenderWindow& window);
+    MenuScreen(sf::RenderWindow& window);
     InputActionResult handleKeyboardInput(sf::Keyboard::Scancode scancode) override;
 };

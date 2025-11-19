@@ -1,9 +1,10 @@
 #include "2048/ui/boardRenderer.hpp"
+#include "2048/ui/assets.hpp"
 #include <cmath>
 #include <sstream>
 
-BoardRenderer::BoardRenderer(GameAssets* assets, size_t boardWidth, size_t boardHeight)
-    : assets(assets), boardWidth(boardWidth), boardHeight(boardHeight) {
+BoardRenderer::BoardRenderer(size_t boardWidth, size_t boardHeight)
+    : boardWidth(boardWidth), boardHeight(boardHeight) {
     tiles.resize(boardWidth * boardHeight);
 }
 
@@ -95,7 +96,7 @@ void BoardRenderer::render(sf::RenderTarget& target, const Board& board) {
 
             if (value != 0) {
                 // draw number centered
-                sf::Text txt{assets->boldFont, [&value]() {
+                sf::Text txt{Assets2048::boldFont, [&value]() {
                     std::ostringstream ss;
                     ss << value;
                     return ss.str();

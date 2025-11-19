@@ -3,11 +3,10 @@
 #include <cstdint>
 #include <vector>
 #include "2048/game/board.hpp"
-#include "2048/ui/assets.hpp"
 
 class BoardRenderer {
 public:
-	BoardRenderer(GameAssets* assets, size_t boardWidth, size_t boardHeight);
+	BoardRenderer(size_t boardWidth, size_t boardHeight);
 	// render the board to the target; call once per frame
 	void render(sf::RenderTarget& target, const Board& board);
 
@@ -21,7 +20,6 @@ private:
 		bool animating = false;
 	};
 
-	GameAssets* assets;
 	size_t boardWidth;
 	size_t boardHeight;
 	std::vector<TileAnim> tiles;

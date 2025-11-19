@@ -5,13 +5,12 @@
 
 class GameScreen : public UIScreen {
 public:
-    GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& board);
+    GameScreen(sf::RenderWindow& window, Board& board);
     InputActionResult draw(MouseInput& mouseInput, sf::RenderWindow& window) override;
     InputActionResult handleKeyboardInput(sf::Keyboard::Scancode scancode) override;
     void setScore(std::uint64_t newScore);
 private:
     Board& board;
-    GameAssets& assets;
     BoardRenderer boardRenderer;
     UIElement score;
     UIElement highScore;

@@ -1,4 +1,5 @@
 #include "2048/ui/windowManager.hpp"
+#include "2048/ui/assets.hpp"
 
 WindowManager2048::WindowManager2048()
     : window{sf::VideoMode{{1280, 720}}, "2048", sf::Style::Default} {}
@@ -22,7 +23,7 @@ void WindowManager2048::handleResize() {
     window.setView(view);
 }
 
-void WindowManager2048::toggleFullScreen(GameAssets& assets) {
+void WindowManager2048::toggleFullScreen() {
 	isFullscreen = !isFullscreen;
 	if (isFullscreen) {
 		windowResolutionBeforeFullscreen = window.getSize();
@@ -32,11 +33,11 @@ void WindowManager2048::toggleFullScreen(GameAssets& assets) {
 		window.create(sf::VideoMode(windowResolutionBeforeFullscreen), "2048", sf::Style::Default);
 		window.setPosition(windowPositionBeforeFullscreen);
 	}
-	applyWindowSettings(assets);
+	applyWindowSettings();
 }
 
-void WindowManager2048::applyWindowSettings(GameAssets& assets) {
-	window.setIcon(assets.icon);
+void WindowManager2048::applyWindowSettings() {
+	window.setIcon(Assets2048::icon);
 	window.setVerticalSyncEnabled(true);
     sf::View view(sf::FloatRect({0.f, 0.f}, {1920.f, 1080.f}));
     window.setView(view);

@@ -2,7 +2,6 @@
 #include "2048/game/board.hpp"
 #include "2048/input/keyboard.hpp"
 #include "2048/input/mouse.hpp"
-#include "2048/ui/assets.hpp"
 #include "2048/ui/screens/base.hpp"
 #include "2048/ui/windowManager.hpp"
 #include <memory>
@@ -23,7 +22,6 @@ private:
 	Board board;
 	KeyboardInput keyboardInput;
 	MouseInput mouseInput;
-	GameAssets assets;
 	std::unique_ptr<UIScreen> currentUIScreen;
 	sf::Color backgroundColor;
 };
