@@ -38,7 +38,7 @@ void WindowManager2048::toggleFullScreen(GameAssets& assets) {
 void WindowManager2048::applyWindowSettings(GameAssets& assets) {
 	window.setIcon(assets.icon);
 	window.setVerticalSyncEnabled(true);
-	sf::View view(sf::FloatRect({0.f, 0.f}, {1920.f, 1080.f}));
-    handleResize();
+    sf::View view(sf::FloatRect({0.f, 0.f}, {1920.f, 1080.f}));
     window.setView(view);
+    handleResize();
 }

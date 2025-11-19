@@ -17,6 +17,7 @@ set(SOURCES
     src/game2048.cpp
     src/game/board.cpp
     src/game/random.cpp
+    src/game/scoreStorage.cpp
     src/game/stringToInt.cpp
     src/input/keyboard.cpp
     src/input/mouse.cpp

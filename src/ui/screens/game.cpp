@@ -1,6 +1,7 @@
 #include "2048/ui/screens/game.hpp"
 #include "2048/ui/button.hpp"
 #include "2048/game/stringToInt.hpp"
+#include "2048/game/scoreStorage.hpp"
 using namespace std;
 
 GameScreen::GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& board) 
@@ -13,7 +14,7 @@ GameScreen::GameScreen(GameAssets& assets, sf::RenderWindow& window, Board& boar
 	}, highScore{
 		sf::Vector2f{1154.f, 30.f},
         UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0xBBADA0FF}},
-        UIElementTextParams{"0", &assets.boldFont, 28},
+        UIElementTextParams{to_string(ScoreStorage::loadHighScore()), &assets.boldFont, 28},
         sf::RectangleShape{{200.f, 70.f}}
 	} {
 	score.moveTextPositionBy({0.f, 10.f});
@@ -137,5 +138,6 @@ void GameScreen::setScore(uint64_t newScore) {
 	if (newScore > highScoreNum) {
 		highScore.setText(to_string(newScore));
 		highScore.centerTextInBackground(Axis::X);
+		ScoreStorage::saveHighScore(newScore);
 	}
 }
