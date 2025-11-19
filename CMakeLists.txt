@@ -25,6 +25,7 @@ set(SOURCES
     src/ui/button.cpp
     src/ui/cursorManager.cpp
     src/ui/element.cpp
+    src/ui/windowManager.cpp
     src/ui/screens/base.cpp
     src/ui/screens/game.cpp
     src/ui/screens/menu.cpp

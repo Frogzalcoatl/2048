@@ -4,6 +4,7 @@
 #include "2048/input/mouse.hpp"
 #include "2048/ui/assets.hpp"
 #include "2048/ui/screens/base.hpp"
+#include "2048/ui/windowManager.hpp"
 #include <memory>
 
 class Game2048 {
@@ -17,13 +18,8 @@ private:
 	void setUIScreen(UIScreenTypes screen);
 	void draw();
 	void handleKeyboardInput(sf::Keyboard::Scancode scancode);
-	void handleScreenResult(InputActionResult result);
-	void applyWindowSettings();
-	void toggleFullScreen();
-	sf::RenderWindow window;
-	bool isFullscreen = false;
-	sf::Vector2u windowResolutionBeforeFullscreen = {0, 0};
-	sf::Vector2i windowPositionBeforeFullscreen = {0, 0};
+	void handleInputResult(InputActionResult result);
+	WindowManager2048 windowManager;
 	Board board;
 	KeyboardInput keyboardInput;
 	MouseInput mouseInput;

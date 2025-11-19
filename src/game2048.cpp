@@ -4,46 +4,21 @@
 #include "2048/ui/screens/game.hpp"
 using namespace std;
 
-static void resizeView(const sf::Window& window, sf::View& view) {
-    float windowRatio = static_cast<float>(window.getSize().x) / static_cast<float>(window.getSize().y);
-    float viewRatio = 1920.f / 1080.f; // Target 16:9
-    float sizeX = 1.f;
-    float sizeY = 1.f;
-    float posX = 0.f;
-    float posY = 0.f;
-    if (windowRatio > viewRatio) {
-        sizeX = viewRatio / windowRatio;
-        posX = (1.f - sizeX) / 2.f;
-    } else {
-        sizeY = windowRatio / viewRatio;
-        posY = (1.f - sizeY) / 2.f;
-    }
-    view.setViewport(sf::FloatRect({posX, posY}, {sizeX, sizeY}));
-}
-
-void Game2048::applyWindowSettings() {
-	window.setIcon(assets.icon);
-	window.setVerticalSyncEnabled(true);
-	sf::View view(sf::FloatRect({0.f, 0.f}, {1920.f, 1080.f}));
-    resizeView(window, view);
-    window.setView(view);
-}
-
 Game2048::Game2048(size_t boardWidth, size_t boardHeight)
-    : window{sf::VideoMode{{1280, 720}}, "2048", sf::Style::Default}, board{boardWidth, boardHeight, 2},
-	backgroundColor{0xFAF8EFFF}, keyboardInput{}, mouseInput{} {
+    : board{boardWidth, boardHeight, 2}, backgroundColor{0xFAF8EFFF},
+	windowManager{}, keyboardInput{}, mouseInput{} {
 	assets.loadAll();
-	applyWindowSettings();
+	windowManager.applyWindowSettings(assets);
 	setUIScreen(UIScreenTypes::Menu);
 	//assets.loadMusic("./assets/music/moog_city.ogg");
 	//assets.playMusic();
 }
 
 void Game2048::run() {
-	while (window.isOpen()) {
-		while (const optional event = window.pollEvent()) {
+	while (windowManager.window.isOpen()) {
+		while (const optional event = windowManager.window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
-				window.close();
+				windowManager.window.close();
 			} else if (const auto keyPressed = event->getIf<sf::Event::KeyPressed>()) {
 				auto keyPressedThisTick = keyboardInput.pressed(keyPressed);
 				if (keyPressedThisTick.has_value()) {
@@ -52,48 +27,46 @@ void Game2048::run() {
 			} else if (const auto keyReleased = event->getIf<sf::Event::KeyReleased>()) {
 				keyboardInput.released(keyReleased);
 			} else if (const auto resized = event->getIf<sf::Event::Resized>()) {
-				sf::View view = window.getView();
-                resizeView(window, view);
-                window.setView(view);
+				windowManager.handleResize();
 			}
 		}
-		mouseInput.update(window);
-		window.clear(backgroundColor);
+		mouseInput.update(windowManager.window);
+		windowManager.window.clear(backgroundColor);
 		draw();
-		window.display();
+		windowManager.window.display();
 	}
 }
 
 void Game2048::close() {
-	window.close();
+	windowManager.window.close();
 }
 
 void Game2048::setUIScreen(UIScreenTypes screen) {
 	switch (screen) {
 		case UIScreenTypes::Menu: {
-			currentUIScreen = make_unique<MenuScreen>(assets, window);
+			currentUIScreen = make_unique<MenuScreen>(assets, windowManager.window);
 		}; break;
 		case UIScreenTypes::Game: {
-			currentUIScreen = make_unique<GameScreen>(assets, window, board);
+			currentUIScreen = make_unique<GameScreen>(assets, windowManager.window, board);
 		}; break;
 	}
 }
 
 void Game2048::draw() {
 	auto screen = currentUIScreen.get();
-	InputActionResult result = screen->draw(mouseInput, window);
-	handleScreenResult(result);
+	InputActionResult result = screen->draw(mouseInput, windowManager.window);
+	handleInputResult(result);
 }
 
 void Game2048::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
 	InputActionResult result = currentUIScreen.get()->handleKeyboardInput(scancode);
-	handleScreenResult(result);
+	handleInputResult(result);
 }
 
-void Game2048::handleScreenResult(InputActionResult result) {
+void Game2048::handleInputResult(InputActionResult result) {
 	GameScreen* gameScreen = dynamic_cast<GameScreen*>(currentUIScreen.get());
 	if (result.action == InputAction::ExitGame) {
-		window.close();
+		windowManager.window.close();
 	}
 	if (result.action == InputAction::ChangeScreen && result.screenType.has_value()) {
 		setUIScreen(*result.screenType);
@@ -112,19 +85,6 @@ void Game2048::handleScreenResult(InputActionResult result) {
 		}
 	}
 	if (result.action == InputAction::ToggleFullscreen) {
-		toggleFullScreen();
+		windowManager.toggleFullScreen(assets);
 	}
-}
-
-void Game2048::toggleFullScreen() {
-	isFullscreen = !isFullscreen;
-	if (isFullscreen) {
-		windowResolutionBeforeFullscreen = window.getSize();
-		windowPositionBeforeFullscreen = window.getPosition();
-		window.create(sf::VideoMode::getDesktopMode(), "2048", sf::Style::None, sf::State::Fullscreen);
-	} else {
-		window.create(sf::VideoMode(windowResolutionBeforeFullscreen), "2048", sf::Style::Default);
-		window.setPosition(windowPositionBeforeFullscreen);
-	}
-	applyWindowSettings();
 }
