@@ -13,9 +13,11 @@ class Board {
 public:
 	const size_t width;
 	const size_t height;
+	size_t prefill = 0;
 	Board(size_t width, size_t height);
 	Board(size_t width, size_t height, size_t prefill);
 	bool populate();
+	void doPrefill();
 	void doMove(Direction direction);
 	void reset();
 	const std::vector<std::uint64_t>& getTiles() const;

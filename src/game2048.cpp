@@ -76,8 +76,6 @@ void Game2048::handleInputResult(InputActionResult result) {
 	}
 	if (result.action == InputAction::ResetGame) {
 		board.reset();
-		board.populate();
-		board.populate();
 	}
 	if (result.action == InputAction::UpdateScore || result.action == InputAction::ResetGame) {
 		if (GameScreen* gameScreen = dynamic_cast<GameScreen*>(currentUIScreen.get())) {

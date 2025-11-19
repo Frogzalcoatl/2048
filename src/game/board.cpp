@@ -23,16 +23,21 @@ bool Board::populate() {
 	return true;
 }
 
-Board::Board(size_t width, size_t height, size_t prefill) : width(width), height(height) {
-	tiles.resize(width * height, 0);
+void Board::doPrefill() {
 	for (size_t i = 0; i < prefill; i++) {
 		populate();
 	}
 }
 
+Board::Board(size_t width, size_t height, size_t prefill) : width(width), height(height), prefill(prefill) {
+	tiles.resize(width * height, 0);
+	doPrefill();
+}
+
 void Board::reset() {
 	gameOverStatus = false;
 	fill(tiles.begin(), tiles.end(), 0);
+	doPrefill();
 }
 
 const vector<uint64_t>& Board::getTiles() const {
