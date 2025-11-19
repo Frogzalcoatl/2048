@@ -1,8 +1,10 @@
 # Todo List
 
+### Project Requirements
+* Done :D (Minus multiple inheritance)
+
 ### Extra Stuff
-* Window Resizability
 * boardRenderer animations
 * Fix general formatting and code efficiency issues
-* Improve UIElement management
+* Improve UIElement management in UIScreens
 
