@@ -3,7 +3,17 @@
 #include "2048/ui/screens/menu.hpp"
 #include "2048/ui/screens/game.hpp"
 #include "2048/ui/assets.hpp"
+#include "2048/game/scoreStorage.hpp"
 using namespace std;
+
+Game2048::~Game2048() {
+	uint64_t highscoreInFile = ScoreStorage::loadHighScore(board);
+	uint64_t currentScore = board.getScore();
+	if (currentScore > highscoreInFile) {
+		ScoreStorage::saveHighScore(currentScore);
+	}
+	windowManager.window.close();
+}
 
 Game2048::Game2048(size_t boardWidth, size_t boardHeight)
     : board{boardWidth, boardHeight, 2}, backgroundColor{0xFAF8EFFF},
@@ -29,17 +39,14 @@ void Game2048::run() {
 				keyboardInput.released(keyReleased);
 			} else if (const auto resized = event->getIf<sf::Event::Resized>()) {
 				windowManager.handleResize();
+			} else if (const auto mouseMoved = event->getIf<sf::Event::MouseMoved>()) {
+				mouseInput.update(windowManager.window);
 			}
 		}
-		mouseInput.update(windowManager.window);
 		windowManager.window.clear(backgroundColor);
 		draw();
 		windowManager.window.display();
 	}
-}
-
-void Game2048::close() {
-	windowManager.window.close();
 }
 
 void Game2048::setUIScreen(UIScreenTypes screen) {

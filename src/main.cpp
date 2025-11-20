@@ -5,14 +5,25 @@
 using namespace std;
 
 int main() {
+	Game2048* game = nullptr;
 	try {
-		Game2048 game{4, 4};
-		game.run();
+		game = new Game2048{4, 4};
+		game->run();
 	} catch (runtime_error& e) {
 		cerr << e.what() << endl;
+		if (game) {
+			delete game;
+		}
 		return 1;
 	} catch (...) {
 		cerr << "Unknown error occured." << endl;
+		if (game) {
+			delete game;
+		}
 		return 1;
 	}
+	if (game) {
+		delete game;
+	}
+	return 0;
 }

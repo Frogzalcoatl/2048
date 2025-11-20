@@ -139,6 +139,5 @@ void GameScreen::setScore(uint64_t newScore) {
 	if (newScore > highScoreNum) {
 		highScore.setText(to_string(newScore));
 		highScore.centerTextInBackground(Axis::X);
-		ScoreStorage::saveHighScore(newScore);
 	}
 }

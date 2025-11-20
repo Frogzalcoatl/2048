@@ -20,15 +20,15 @@ public:
 	void doPrefill();
 	void doMove(Direction direction);
 	void reset();
-	const std::vector<std::uint64_t>& getTiles() const;
+	const std::vector<uint64_t>& getTiles() const;
 	void updateGameOverStatus();
 	bool getGameOverStatus();
-	std::uint64_t getScore();
+	uint64_t getScore();
 
 private:
 	bool gameOverStatus = false;
-	std::vector<std::uint64_t> tiles;
-	std::vector<std::uint64_t> mergeLine(const std::vector<std::uint64_t>& line);
-	std::vector<std::uint64_t> getRow(size_t i);
-	std::vector<std::uint64_t> getColumn(size_t i);
+	std::vector<uint64_t> tiles;
+	std::vector<uint64_t> mergeLine(const std::vector<uint64_t>& line);
+	std::vector<uint64_t> getRow(size_t i);
+	std::vector<uint64_t> getColumn(size_t i);
 };

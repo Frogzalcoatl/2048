@@ -8,10 +8,9 @@
 
 class Game2048 {
 public:
-	~Game2048() {}
+	~Game2048();
 	Game2048(size_t boardWidth, size_t boardHeight);
 	void run();
-	void close();
 
 private:
 	void setUIScreen(UIScreenTypes screen);

@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "2048/game/board.hpp"
 #include "2048/game/random.hpp"
+#include "2048/game/scoreStorage.hpp"
 #include <string>
 using namespace std;
 
@@ -137,6 +138,7 @@ void Board::updateGameOverStatus() {
 		}
 	}
 	gameOverStatus = true;
+	ScoreStorage::saveHighScore(getScore());
 }
 
 uint64_t Board::getScore() {
