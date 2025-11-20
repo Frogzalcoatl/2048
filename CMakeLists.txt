@@ -17,8 +17,8 @@ if(MSVC)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 
-set(SFML_STATIC_LIBRARIES OFF CACHE BOOL "Link SFML statically" FORCE)
-set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
+set(SFML_STATIC_LIBRARIES ON CACHE BOOL "Link SFML statically" FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
 
 # Try to find SFML package first (much faster if installed)
 find_package(SFML 3.0 COMPONENTS Graphics Audio CONFIG QUIET)
