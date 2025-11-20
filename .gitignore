@@ -3,5 +3,6 @@ out
 .cache
 .idea
 .vs
-.vscode
+.vscode/*
+!.vscode/extensions.json
 data
