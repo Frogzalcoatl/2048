@@ -17,7 +17,7 @@ Game2048::~Game2048() {
 
 Game2048::Game2048(size_t boardWidth, size_t boardHeight)
     : board{boardWidth, boardHeight, 2}, backgroundColor{0xFAF8EFFF},
-	windowManager{}, keyboardInput{}, mouseInput{} {
+	windowManager{}, keyboardManager{} {
 	Assets2048::loadAll();
 	windowManager.applyWindowSettings();
 	setUIScreen(UIScreenTypes::Menu);
@@ -31,16 +31,18 @@ void Game2048::run() {
 			if (event->is<sf::Event::Closed>()) {
 				windowManager.window.close();
 			} else if (const auto keyPressed = event->getIf<sf::Event::KeyPressed>()) {
-				auto keyPressedThisTick = keyboardInput.pressed(keyPressed);
+				auto keyPressedThisTick = keyboardManager.pressedEvent(keyPressed);
 				if (keyPressedThisTick.has_value()) {
 					handleKeyboardInput(*keyPressedThisTick);
 				}
 			} else if (const auto keyReleased = event->getIf<sf::Event::KeyReleased>()) {
-				keyboardInput.released(keyReleased);
+				keyboardManager.releasedEvent(keyReleased);
 			} else if (const auto resized = event->getIf<sf::Event::Resized>()) {
 				windowManager.handleResize();
-			} else if (const auto mouseMoved = event->getIf<sf::Event::MouseMoved>()) {
-				mouseInput.update(windowManager.window);
+			}
+			if (currentUIScreen) {
+				InputActionResult result = currentUIScreen->handleEvent(*event, windowManager.window);
+				handleInputResult(result);
 			}
 		}
 		windowManager.window.clear(backgroundColor);
@@ -61,9 +63,9 @@ void Game2048::setUIScreen(UIScreenTypes screen) {
 }
 
 void Game2048::draw() {
-	auto screen = currentUIScreen.get();
-	InputActionResult result = screen->draw(mouseInput, windowManager.window);
-	handleInputResult(result);
+	if (currentUIScreen) {
+		currentUIScreen->draw(windowManager.window);
+	}
 }
 
 void Game2048::handleKeyboardInput(sf::Keyboard::Scancode scancode) {

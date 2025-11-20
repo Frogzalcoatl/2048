@@ -1,6 +1,6 @@
 #include "2048/ui/boardRenderer.hpp"
 #include "2048/ui/assets.hpp"
-#include <cmath>
+#include <algorithm>
 #include <sstream>
 
 BoardRenderer::BoardRenderer(size_t boardWidth, size_t boardHeight)

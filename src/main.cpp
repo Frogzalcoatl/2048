@@ -1,4 +1,3 @@
-#include <SFML/Graphics.hpp>
 #include "2048/game2048.hpp"
 #include <iostream>
 

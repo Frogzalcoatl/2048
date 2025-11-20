@@ -16,12 +16,12 @@ public:
 	size_t prefill = 0;
 	Board(size_t width, size_t height);
 	Board(size_t width, size_t height, size_t prefill);
-	bool populate();
+	// Returns amount of empty indexes in tiles.
+	size_t populate();
 	void doPrefill();
 	void doMove(Direction direction);
 	void reset();
 	const std::vector<uint64_t>& getTiles() const;
-	void updateGameOverStatus();
 	bool getGameOverStatus();
 	uint64_t getScore();
 
@@ -31,4 +31,5 @@ private:
 	std::vector<uint64_t> mergeLine(const std::vector<uint64_t>& line);
 	std::vector<uint64_t> getRow(size_t i);
 	std::vector<uint64_t> getColumn(size_t i);
+	void updateGameOverStatus(size_t emptyCount);
 };

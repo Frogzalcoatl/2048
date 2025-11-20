@@ -138,3 +138,7 @@ void UIElement::moveTextPositionBy(const sf::Vector2f& amount) {
 	textPosition.y += amount.y;
 	text->setPosition(textPosition);
 }
+
+InputActionResult UIElement::handleEvent(const sf::Event& event, sf::RenderWindow& window) {
+	return InputActionResult{};
+}

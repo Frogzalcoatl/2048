@@ -1,4 +1,5 @@
 #include "2048/game/random.hpp"
+#include <random>
 using namespace std;
 static thread_local minstd_rand generator(random_device{}());
 int getRandomInt(int min, int max) {

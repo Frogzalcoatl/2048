@@ -1,8 +1,7 @@
 #pragma once
 #include <optional>
 #include <SFML/Graphics.hpp>
-#include "2048/input/mouse.hpp"
-#include "2048/game/board.hpp"
+#include "2048/input/inputAction.hpp"
 
 struct UIElementColorParams {
 	std::optional<sf::Color> text;
@@ -23,7 +22,6 @@ enum Axis {
 
 class UIElement {
 public:
-	// This allows dyanamic_cast in the UIScreen vector.
 	virtual ~UIElement() {}
 
 	UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, std::optional<UIElementTextParams> textParams, std::optional<sf::RectangleShape> background = std::nullopt);
@@ -39,6 +37,7 @@ public:
 	void centerInWindow(sf::RenderWindow& window, Axis axis);
 	void moveTextPositionBy(const sf::Vector2f& amount);
 	void centerTextInBackground(Axis axis);
+	virtual InputActionResult handleEvent(const sf::Event& event, sf::RenderWindow& window);
 
 protected:
 	std::optional<sf::RectangleShape> background;

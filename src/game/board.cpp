@@ -2,14 +2,13 @@
 #include "2048/game/board.hpp"
 #include "2048/game/random.hpp"
 #include "2048/game/scoreStorage.hpp"
-#include <string>
 using namespace std;
 
 Board::Board(size_t width, size_t height) : width(width), height(height) {
 	tiles.resize(width * height, 0);
 }
 
-bool Board::populate() {
+size_t Board::populate() {
 	vector<size_t> emptyIndexes;
 	for (size_t i = 0; i < tiles.size(); i++) {
 		if (tiles[i] == 0) {
@@ -17,11 +16,11 @@ bool Board::populate() {
 		}
 	}
 	if (emptyIndexes.size() == 0) {
-		return false;
+		return 0;
 	}
 	const size_t i = emptyIndexes[getRandomInt(0, emptyIndexes.size() - 1)];
 	tiles[i] = getRandomInt(0, 19) > 3 ? 2 : 4;
-	return true;
+	return emptyIndexes.size() - 1;
 }
 
 void Board::doPrefill() {
@@ -113,19 +112,16 @@ void Board::doMove(Direction direction) {
 		}
 	}
 	if (moved) {
-		populate();
-		updateGameOverStatus();
+		updateGameOverStatus(populate());
 	}
 }
 
-void Board::updateGameOverStatus() {
-	size_t sizeOfTiles = tiles.size();
-	for (size_t i = 0; i < sizeOfTiles; i++) {
-		if (tiles[i] == 0) {
-			gameOverStatus = false;
-			return;
-		}
+void Board::updateGameOverStatus(size_t emptyCount) {
+	if (emptyCount > 0) {
+		gameOverStatus = false;
+		return;
 	}
+	size_t sizeOfTiles = tiles.size();
 	for (size_t i = 0; i < sizeOfTiles; i++) {
 		size_t belowIndex = i + width;
 		if (belowIndex < sizeOfTiles && tiles[i] == tiles[belowIndex]) {

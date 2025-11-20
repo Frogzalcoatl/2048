@@ -1,7 +1,6 @@
 #pragma once
 #include "2048/game/board.hpp"
 #include "2048/input/keyboard.hpp"
-#include "2048/input/mouse.hpp"
 #include "2048/ui/screens/base.hpp"
 #include "2048/ui/windowManager.hpp"
 #include <memory>
@@ -19,8 +18,7 @@ private:
 	void handleInputResult(InputActionResult result);
 	WindowManager2048 windowManager;
 	Board board;
-	KeyboardInput keyboardInput;
-	MouseInput mouseInput;
+	KeyboardManager keyboardManager;
 	std::unique_ptr<UIScreen> currentUIScreen;
 	sf::Color backgroundColor;
 };

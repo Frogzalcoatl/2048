@@ -112,10 +112,10 @@ InputActionResult GameScreen::handleKeyboardInput(sf::Keyboard::Scancode scancod
 	}
 }
 
-InputActionResult GameScreen::draw(MouseInput& mouseInput, sf::RenderWindow& window) {
+void GameScreen::draw(sf::RenderWindow& window) {
 	score.draw(window);
 	highScore.draw(window);
-	InputActionResult buttonResult = UIScreen::draw(mouseInput, window);
+	UIScreen::draw(window);
 	boardRenderer.render(window, board);
 	bool isGameOver = board.getGameOverStatus();
 	if (isGameOver) {
@@ -125,7 +125,6 @@ InputActionResult GameScreen::draw(MouseInput& mouseInput, sf::RenderWindow& win
 		gameOver.setFillColor(sf::Color::Black);
 		window.draw(gameOver);
 	}
-	return buttonResult;
 }
 
 void GameScreen::setScore(uint64_t newScore) {

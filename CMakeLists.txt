@@ -43,10 +43,10 @@ set(SOURCES
     src/game/scoreStorage.cpp
     src/game/stringToInt.cpp
     src/input/keyboard.cpp
-    src/input/mouse.cpp
     src/ui/assets.cpp
     src/ui/boardRenderer.cpp
     src/ui/button.cpp
+    src/ui/cursorManager.cpp
     src/ui/element.cpp
     src/ui/windowManager.cpp
     src/ui/screens/base.cpp
