@@ -1,5 +1,4 @@
 #include "2048/ui/button.hpp"
-#include "2048/ui/cursorManager.hpp"
 using namespace std;
 
 Button::Button(
@@ -39,7 +38,7 @@ InputActionResult Button::update(MouseInput& mouseInput, sf::RenderWindow& windo
 	bool leftClickPressed = mouseInput.isLeftClickDown();
 	bool leftClickReleased = mouseInput.wasLeftClickReleased();
 	if (mouseIsWithinBounds) {
-		window.setMouseCursor(CursorManager::getHoveredCursor());
+		mouseInput.requestCursor(sf::Cursor::Type::Hand);
 		bool leftClickPressed = mouseInput.isLeftClickDown();
 		bool leftClickReleased = mouseInput.wasLeftClickReleased();
 		if (leftClickPressed) {
