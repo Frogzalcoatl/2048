@@ -2,6 +2,7 @@
 #include "2048/game2048.hpp"
 #include "2048/ui/screens/menu.hpp"
 #include "2048/ui/screens/game.hpp"
+#include "2048/ui/cursorManager.hpp"
 
 Game2048::~Game2048() {
 	board.saveData();
@@ -52,6 +53,7 @@ void Game2048::performScreenSwitch(UIScreenTypes screen) {
 				// play button
 				[this]() {
 					this->requestScreenSwitch(UIScreenTypes::Game);
+					this->windowManager.window.setMouseCursor(CursorManager::getCursor(sf::Cursor::Type::Arrow));
 				},
 				// quit button
 				[this]() {
@@ -65,6 +67,7 @@ void Game2048::performScreenSwitch(UIScreenTypes screen) {
 				// back button
 				[this]() {
 					this->requestScreenSwitch(UIScreenTypes::Menu);
+					this->windowManager.window.setMouseCursor(CursorManager::getCursor(sf::Cursor::Type::Arrow));
 				},
 				// new game button
 				[this]() {
