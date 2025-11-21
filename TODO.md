@@ -4,7 +4,7 @@
 * Done :D (Minus multiple inheritance)
 
 ### Extra Stuff
-* boardRenderer animations
-* Fix general formatting and code efficiency issues
-* Improve UIElement management in UIScreens
+* Improve boardRenderer animations (i dont feel like doing this ngl)
+* Improve inefficient board move logic (i also dont feel like doing this)
+* Separate UIElement into a TextUIElement and BackgronudUIElement (i also dont feel like doing this rn maybe in the future)
 

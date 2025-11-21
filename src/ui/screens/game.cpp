@@ -1,7 +1,6 @@
 #include "2048/ui/screens/game.hpp"
 #include "2048/ui/button.hpp"
 #include "2048/game/stringToInt.hpp"
-#include "2048/game/scoreStorage.hpp"
 #include "2048/ui/assets.hpp"
 
 GameScreen::GameScreen(sf::RenderWindow& window, Board& board, std::function<void()> backButton, std::function<void()> newGameButton) 
@@ -14,7 +13,7 @@ GameScreen::GameScreen(sf::RenderWindow& window, Board& board, std::function<voi
 	}, highScore{
 		sf::Vector2f{1154.f, 30.f},
         UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0xBBADA0FF}},
-        UIElementTextParams{std::to_string(ScoreStorage::loadHighScore(board)), &Assets2048::boldFont, 28},
+        UIElementTextParams{std::to_string(board.getHighScore()), &Assets2048::boldFont, 28},
         sf::RectangleShape{{200.f, 70.f}}
 	} {
 	score.moveTextPositionBy({0.f, 10.f});
@@ -100,7 +99,7 @@ void GameScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
 		}; break;
 	}
 	if (moved) {
-		setScore(board.getScore());
+		updateScore();
 	}
 }
 
@@ -119,16 +118,10 @@ void GameScreen::draw(sf::RenderWindow& window) {
 	}
 }
 
-void GameScreen::setScore(uint64_t newScore) {
-	score.setText(std::to_string(newScore));
+void GameScreen::updateScore() {
+	score.setText(std::to_string(board.getScore()));
 	score.centerTextInBackground(Axis::X);
-	auto highScoreText = highScore.getText();
-	if (!highScoreText.has_value()) {
-		return;
-	}
-	uint64_t highScoreNum = stringToUInt64(*highScoreText);
-	if (newScore > highScoreNum) {
-		highScore.setText(std::to_string(newScore));
-		highScore.centerTextInBackground(Axis::X);
-	}
+	uint64_t highScoreNum = board.getHighScore();
+	highScore.setText(std::to_string(highScoreNum));
+	highScore.centerTextInBackground(Axis::X);
 }

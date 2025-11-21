@@ -1,10 +1,115 @@
-#include <algorithm>
 #include "2048/game/board.hpp"
 #include "2048/game/random.hpp"
-#include "2048/game/scoreStorage.hpp"
+#include "2048/game/stringToInt.hpp"
+#include <algorithm>
+#include <fstream>
+#include <filesystem>
+#include <string>
+#include <sstream>
+#include <iostream>
 
-Board::Board(size_t width, size_t height) : width(width), height(height) {
+const std::string FOLDER_NAME = "data";
+const std::string TILES_FILE_NAME = "tiles.txt";
+const auto TILES_FILE_PATH = std::filesystem::path(FOLDER_NAME) / TILES_FILE_NAME;
+const std::string HIGHSCORE_FILE_NAME = "highscore.txt";
+const auto HIGHSCORE_FILE_PATH = std::filesystem::path(FOLDER_NAME) / HIGHSCORE_FILE_NAME;
+
+uint64_t Board::getHighScore() const {
+	return std::max(getScore(), cachedHighScore);
+}
+
+void Board::saveHighScoreToFile() const {
+    std::ofstream file(HIGHSCORE_FILE_PATH);
+    if (file.is_open()) {
+        file << cachedHighScore;
+    }
+}
+
+std::string vectorToString(const std::vector<uint64_t>& vec) {
+	std::string str;
+	for (size_t i = 0; i < vec.size(); i++) {
+		str += std::to_string(vec[i]);
+		if (i + 1 < vec.size()) {
+			str += ",";
+		}
+	}
+	return str;
+}
+
+std::vector<uint64_t> stringToVector(const std::string& s) {
+	std::vector<uint64_t> vec;
+	// Allows string tokenization between commas ","
+	std::stringstream ss(s);
+	std::string token;
+	while (std::getline(ss, token, ',')) {
+		if (token.empty()) continue;
+		vec.push_back(stringToUInt64(token));
+	}
+	return vec;
+}
+
+bool Board::isValidTilesVector(const std::vector<uint64_t> tilesVector) const {
+	if (tilesVector.size() != width * height) {
+		return false;
+	}
+	for (const auto& num : tilesVector) {
+		// & is the bitwise AND operator: it keeps a 1 only if both numbers have a 1 in that bit.
+		// ex: 4 = 0100, & 7 = 1111, 4 & 7  = 0100
+		// (num & (num - 1)) == 0 is true for powers of two AND zero.
+		// ex: 8 = 1000, 8 - 1 = 0111, 8 & 7 = 0000
+		if ((num & (num - 1)) != 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void Board::loadBoardFromFile() {
 	tiles.resize(width * height, 0);
+    if (!std::filesystem::exists(TILES_FILE_PATH)) {
+		doPrefill();
+		saveBoardToFile();
+		return;
+    }
+	std::ifstream file(TILES_FILE_PATH);
+    std::string fileContent;
+	file >> fileContent;
+	std::vector<uint64_t> loadedTiles = stringToVector(fileContent);
+	if (!isValidTilesVector(loadedTiles)) {
+		doPrefill();
+		saveBoardToFile();
+		return;
+	}
+	tiles = loadedTiles;
+	size_t emptyTileCount = 0;
+	for (size_t i = 0; i < tiles.size(); i++) {
+		if (tiles[i] == 0) {
+			emptyTileCount++;
+		}
+	}
+	updateGameOverStatus(emptyTileCount);
+	if (gameOverStatus) {
+		reset();
+	}
+}
+
+void Board::saveBoardToFile() const {
+	if (!std::filesystem::exists(FOLDER_NAME)) {
+        std::filesystem::create_directory(FOLDER_NAME);
+    }
+	std::ofstream file(TILES_FILE_PATH);
+	if (file.is_open()) {
+		file << vectorToString(tiles);
+	}
+}
+
+void Board::saveData() {
+	uint64_t currentScore = getScore();
+    if (currentScore > cachedHighScore) {
+        cachedHighScore = currentScore;
+    }
+	saveBoardToFile();
+	saveHighScoreToFile();
 }
 
 size_t Board::populate() {
@@ -29,12 +134,21 @@ void Board::doPrefill() {
 	}
 }
 
-Board::Board(size_t width, size_t height, size_t prefill) : width(width), height(height), prefill(prefill) {
-	tiles.resize(width * height, 0);
-	doPrefill();
+Board::Board(size_t width, size_t height, size_t prefill) : width{width}, height{height}, prefill{prefill} {
+	loadBoardFromFile();
+	std::ifstream file(HIGHSCORE_FILE_PATH);
+    if (file.is_open()) {
+        std::string content;
+        file >> content;
+        cachedHighScore = stringToUInt64(content);
+    }
 }
 
 void Board::reset() {
+	uint64_t currentScore = getScore();
+    if (currentScore > cachedHighScore) {
+        cachedHighScore = currentScore;
+    }
 	gameOverStatus = false;
 	fill(tiles.begin(), tiles.end(), 0);
 	doPrefill();
@@ -134,7 +248,7 @@ void Board::updateGameOverStatus(size_t emptyCount) {
 		}
 	}
 	gameOverStatus = true;
-	ScoreStorage::saveHighScore(getScore());
+	saveBoardToFile();
 }
 
 uint64_t Board::getScore() const {

@@ -2,21 +2,14 @@
 #include "2048/game2048.hpp"
 #include "2048/ui/screens/menu.hpp"
 #include "2048/ui/screens/game.hpp"
-#include "2048/ui/assets.hpp"
-#include "2048/game/scoreStorage.hpp"
 
 Game2048::~Game2048() {
-	uint64_t highscoreInFile = ScoreStorage::loadHighScore(board);
-	uint64_t currentScore = board.getScore();
-	if (currentScore > highscoreInFile) {
-		ScoreStorage::saveHighScore(currentScore);
-	}
+	board.saveData();
 }
 
 Game2048::Game2048(size_t boardWidth, size_t boardHeight)
     : board{boardWidth, boardHeight, 2}, backgroundColor{0xFAF8EFFF},
 	windowManager{} {
-	Assets2048::loadAll();
 	windowManager.applyWindowSettings();
 	performScreenSwitch(UIScreenTypes::Menu);
 	// Assets2048::loadMusic("./assets/music/moog_city.ogg");
@@ -75,8 +68,8 @@ void Game2048::performScreenSwitch(UIScreenTypes screen) {
 				},
 				// new game button
 				[this]() {
-					this->board.reset();
 					this->requestScreenSwitch(UIScreenTypes::Game);
+					this->board.reset();
 				}
 			);
 		}; break;

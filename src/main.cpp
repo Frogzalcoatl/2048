@@ -1,7 +1,9 @@
 #include "2048/game2048.hpp"
+#include "2048/ui/assets.hpp"
 #include <iostream>
 
 int main() {
+	Assets2048::loadAll();
 	Game2048* game = nullptr;
 	try {
 		game = new Game2048{4, 4};

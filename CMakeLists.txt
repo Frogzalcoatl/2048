@@ -40,7 +40,6 @@ set(SOURCES
     src/game2048.cpp
     src/game/board.cpp
     src/game/random.cpp
-    src/game/scoreStorage.cpp
     src/game/stringToInt.cpp
     src/ui/assets.cpp
     src/ui/boardRenderer.cpp
@@ -55,7 +54,7 @@ set(SOURCES
 
 if(WIN32)
 # Add WIN32 before ${SOURCES} to remove the debug console.
-    add_executable(${PROJECT_NAME} WIN32 ${SOURCES} resources/icon.rc)
+    add_executable(${PROJECT_NAME} ${SOURCES} resources/icon.rc)
     target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics SFML::Audio SFML::Main)
 elseif(APPLE)
     add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES})
