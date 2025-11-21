@@ -5,7 +5,7 @@
 #include "2048/ui/assets.hpp"
 using namespace std;
 
-GameScreen::GameScreen(sf::RenderWindow& window, Board& board) 
+GameScreen::GameScreen(sf::RenderWindow& window, Board& board, function<void()> backButton, function<void()> newGameButton) 
 	: board{board}, boardRenderer{board.width, board.height},
 	score{
 		sf::Vector2f{938.f, 30.f},
@@ -53,9 +53,7 @@ GameScreen::GameScreen(sf::RenderWindow& window, Board& board)
 	sf::Vector2f buttonSize = {250.f, 90.f};
     elements.push_back(
         make_unique<Button>(
-            []() {
-                return InputActionResult{InputAction::ChangeScreen, UIScreenTypes::Menu};
-            },
+            backButton,
             sf::Vector2f{0.f, 965.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
             UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x726151FF}},
@@ -67,9 +65,7 @@ GameScreen::GameScreen(sf::RenderWindow& window, Board& board)
 	elements.back().get()->centerInWindow(window, Axis::X);
 	elements.push_back(
         make_unique<Button>(
-            []() {
-                return InputActionResult{InputAction::ResetGame};
-            },
+            newGameButton,
             sf::Vector2f{1600.f, 20.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
             UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x726151FF}},
@@ -80,35 +76,32 @@ GameScreen::GameScreen(sf::RenderWindow& window, Board& board)
     );
 }
 
-InputActionResult GameScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
-	InputActionResult baseResult = UIScreen::handleKeyboardInput(scancode);
-	if (baseResult.action != InputAction::None) {
-		return baseResult;
-	}
+void GameScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
+	bool moved = false;
     switch (scancode) {
 		case sf::Keyboard::Scancode::Up:
 		case sf::Keyboard::Scancode::W: {
 			board.doMove(Direction::Up);
-			return InputActionResult{InputAction::UpdateScore};
+			moved = true;
 		}; break;
 		case sf::Keyboard::Scancode::Down:
 		case sf::Keyboard::Scancode::S: {
 			board.doMove(Direction::Down);
-			return InputActionResult{InputAction::UpdateScore};
+			moved = true;
 		}; break;
 		case sf::Keyboard::Scancode::Right:
 		case sf::Keyboard::Scancode::D: {
 			board.doMove(Direction::Right);
-			return InputActionResult{InputAction::UpdateScore};
+			moved = true;
 		}; break;
 		case sf::Keyboard::Scancode::Left:
 		case sf::Keyboard::Scancode::A: {
 			board.doMove(Direction::Left);
-			return InputActionResult{InputAction::UpdateScore};
+			moved = true;
 		}; break;
-		default: {
-			return InputActionResult{};
-		}
+	}
+	if (moved) {
+		setScore(board.getScore());
 	}
 }
 

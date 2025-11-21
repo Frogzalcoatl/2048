@@ -20,7 +20,7 @@ Game2048::Game2048(size_t boardWidth, size_t boardHeight)
 	windowManager{}, keyboardManager{} {
 	Assets2048::loadAll();
 	windowManager.applyWindowSettings();
-	setUIScreen(UIScreenTypes::Menu);
+	performScreenSwitch(UIScreenTypes::Menu);
 	// Assets2048::loadMusic("./assets/music/moog_city.ogg");
 	// Assets2048::playMusic();
 }
@@ -33,7 +33,7 @@ void Game2048::run() {
 			} else if (const auto keyPressed = event->getIf<sf::Event::KeyPressed>()) {
 				auto keyPressedThisTick = keyboardManager.pressedEvent(keyPressed);
 				if (keyPressedThisTick.has_value()) {
-					handleKeyboardInput(*keyPressedThisTick);
+					handleKeyboardInput(keyPressed->scancode);
 				}
 			} else if (const auto keyReleased = event->getIf<sf::Event::KeyReleased>()) {
 				keyboardManager.releasedEvent(keyReleased);
@@ -41,9 +41,12 @@ void Game2048::run() {
 				windowManager.handleResize();
 			}
 			if (currentUIScreen) {
-				InputActionResult result = currentUIScreen->handleEvent(*event, windowManager.window);
-				handleInputResult(result);
+				currentUIScreen->handleEvent(*event, windowManager.window);
 			}
+		}
+		if (nextScreen.has_value()) {
+			performScreenSwitch(*nextScreen);
+			nextScreen = nullopt;
 		}
 		windowManager.window.clear(backgroundColor);
 		draw();
@@ -51,13 +54,37 @@ void Game2048::run() {
 	}
 }
 
-void Game2048::setUIScreen(UIScreenTypes screen) {
+void Game2048::requestScreenSwitch(UIScreenTypes screen) {
+	nextScreen = screen;
+}
+
+void Game2048::performScreenSwitch(UIScreenTypes screen) {
 	switch (screen) {
 		case UIScreenTypes::Menu: {
-			currentUIScreen = make_unique<MenuScreen>(windowManager.window);
+			currentUIScreen = make_unique<MenuScreen>(
+				windowManager.window,
+				// play button
+				[this]() {
+					this->requestScreenSwitch(UIScreenTypes::Game);
+				},
+				// quit button
+				[this]() {
+					this->windowManager.window.close();
+				}
+			);
 		}; break;
 		case UIScreenTypes::Game: {
-			currentUIScreen = make_unique<GameScreen>(windowManager.window, board);
+			currentUIScreen = make_unique<GameScreen>(
+				windowManager.window, board,
+				// back button
+				[this]() {
+					this->requestScreenSwitch(UIScreenTypes::Menu);
+				},
+				// new game button
+				[this]() {
+					this->board.reset();
+				}
+			);
 		}; break;
 	}
 }
@@ -69,26 +96,10 @@ void Game2048::draw() {
 }
 
 void Game2048::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
-	InputActionResult result = currentUIScreen.get()->handleKeyboardInput(scancode);
-	handleInputResult(result);
-}
-
-void Game2048::handleInputResult(InputActionResult result) {
-	if (result.action == InputAction::ExitGame) {
-		windowManager.window.close();
-	}
-	if (result.action == InputAction::ChangeScreen && result.screenType.has_value()) {
-		setUIScreen(*result.screenType);
-	}
-	if (result.action == InputAction::ResetGame) {
-		board.reset();
-	}
-	if (result.action == InputAction::UpdateScore || result.action == InputAction::ResetGame) {
-		if (GameScreen* gameScreen = dynamic_cast<GameScreen*>(currentUIScreen.get())) {
-			gameScreen->setScore(board.getScore());
-		}
-	}
-	if (result.action == InputAction::ToggleFullscreen) {
+	if (scancode == sf::Keyboard::Scancode::F11) {
 		windowManager.toggleFullScreen();
+		return;
 	}
+	currentUIScreen.get()->handleKeyboardInput(scancode);
+	
 }

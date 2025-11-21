@@ -1,12 +1,13 @@
 #pragma once
 #include "2048/ui/screens/base.hpp"
 #include "2048/ui/boardRenderer.hpp"
+#include <functional>
 
 class GameScreen : public UIScreen {
 public:
-    GameScreen(sf::RenderWindow& window, Board& board);
+    GameScreen(sf::RenderWindow& window, Board& board, std::function<void()> backButton, std::function<void()> newGameButton) ;
     void draw(sf::RenderWindow& window) override;
-    InputActionResult handleKeyboardInput(sf::Keyboard::Scancode scancode) override;
+    void handleKeyboardInput(sf::Keyboard::Scancode scancode) override;
     void setScore(std::uint64_t newScore);
 private:
     Board& board;

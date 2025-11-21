@@ -3,7 +3,7 @@
 #include "2048/ui/assets.hpp"
 using namespace std;
 
-MenuScreen::MenuScreen(sf::RenderWindow& window) {
+MenuScreen::MenuScreen(sf::RenderWindow& window, function<void()> playButton, function<void()> onQuit): onQuit{onQuit} {
     elements.push_back(
         make_unique<UIElement>(
             sf::Vector2f{0.f, 0.f},
@@ -32,9 +32,7 @@ MenuScreen::MenuScreen(sf::RenderWindow& window) {
     sf::Vector2f buttonSize = {400.f, 75.f};
     elements.push_back(
         make_unique<Button>(
-            []() {
-                return InputActionResult{InputAction::ChangeScreen, UIScreenTypes::Game};
-            },
+            playButton,
             sf::Vector2f{0.f, 500.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
             UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x726151FF}},
@@ -46,9 +44,7 @@ MenuScreen::MenuScreen(sf::RenderWindow& window) {
     elements.back().get()->centerInWindow(window, Axis::X);
     elements.push_back(
         make_unique<Button>(
-            []() {
-                return InputActionResult{InputAction::ExitGame};
-            },
+            onQuit,
             sf::Vector2f{0.f, 625.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
             UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x726151FF}},
@@ -59,17 +55,11 @@ MenuScreen::MenuScreen(sf::RenderWindow& window) {
     );
     elements.back().get()->centerInWindow(window, Axis::X);
 }
-InputActionResult MenuScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
-    InputActionResult baseResult = UIScreen::handleKeyboardInput(scancode);
-    if (baseResult.action != InputAction::None) {
-		return baseResult;
-	}
+void MenuScreen::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
+    UIScreen::handleKeyboardInput(scancode);
     switch (scancode) {
         case sf::Keyboard::Scancode::Escape: {
-            return InputActionResult{InputAction::ExitGame};
+            onQuit();
         } break;
-        default: {
-            return InputActionResult{};
-        }
     }
 }

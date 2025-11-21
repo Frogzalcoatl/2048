@@ -1,5 +1,6 @@
 #include "2048/ui/element.hpp"
 #include <SFML/Graphics.hpp>
+#include <exception>
 using namespace std;
 
 void UIElement::centerTextInBackground(Axis axis) {
@@ -22,7 +23,7 @@ void UIElement::centerTextInBackground(Axis axis) {
 UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, optional<UIElementTextParams> textParams, optional<sf::RectangleShape> backgroundArg) 
 	: background{backgroundArg} {
 	if (!backgroundArg.has_value() && !textParams.has_value()) {
-		this->~UIElement();
+		throw invalid_argument("UI Element must have either background or text.");
 	}
 	if (background.has_value()) {
 		background->setPosition(pos);
@@ -137,8 +138,4 @@ void UIElement::moveTextPositionBy(const sf::Vector2f& amount) {
 	textPosition.x += amount.x;
 	textPosition.y += amount.y;
 	text->setPosition(textPosition);
-}
-
-InputActionResult UIElement::handleEvent(const sf::Event& event, sf::RenderWindow& window) {
-	return InputActionResult{};
 }

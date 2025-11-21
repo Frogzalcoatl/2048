@@ -3,7 +3,7 @@
 using namespace std;
 
 Button::Button(
-	function<InputActionResult()> onClick, const sf::Vector2f& pos, const UIElementColorParams& normalColors, const UIElementColorParams& hoveredColors, const UIElementColorParams& clickedColors, 
+	function<void()> onClick, const sf::Vector2f& pos, const UIElementColorParams& normalColors, const UIElementColorParams& hoveredColors, const UIElementColorParams& clickedColors, 
 	optional<UIElementTextParams> textParams, optional<sf::RectangleShape> background
 ) : UIElement(pos, normalColors, textParams, background), onClick(onClick), normal(normalColors), hovered(hoveredColors), clicked(clickedColors) {}
 
@@ -24,39 +24,7 @@ void Button::updateColors(UIElementColorParams& colors) {
 	}
 }
 
-// InputActionResult Button::update(Cursormanager& cursorManager, sf::RenderWindow& window) {
-// 	sf::FloatRect elementBounds;
-// 	if (background.has_value()) {
-// 		elementBounds = background->getGlobalBounds();
-// 	} else if (text.has_value()) {
-// 		elementBounds = text->getGlobalBounds();
-// 	} else {
-// 		return InputActionResult{};
-// 	}
-// 	sf::Vector2i mousePixelPos = mouseManager.getPos();
-//     sf::Vector2f mouseWorldPos = window.mapPixelToCoords(mousePixelPos);
-// 	bool mouseIsWithinBounds = elementBounds.contains(mouseWorldPos);
-// 	bool leftClickPressed = mouseManager.isLeftClickDown();
-// 	bool leftClickReleased = mouseManager.wasLeftClickReleased();
-// 	if (mouseIsWithinBounds) {
-// 		mouseManager.requestCursor(sf::Cursor::Type::Hand);
-// 		bool leftClickPressed = mouseManager.isLeftClickDown();
-// 		bool leftClickReleased = mouseManager.wasLeftClickReleased();
-// 		if (leftClickPressed) {
-// 			updateColors(clicked);
-// 		} else {
-// 			updateColors(hovered);
-// 		}
-// 		if (leftClickReleased) {
-// 			return onClick();
-// 		}
-// 	} else {
-// 		updateColors(normal);
-// 	}
-// 	return InputActionResult{};
-// }
-
-InputActionResult Button::handleEvent(const sf::Event& event, sf::RenderWindow& window) {
+void Button::handleEvent(const sf::Event& event, sf::RenderWindow& window) {
 	if (event.is<sf::Event::MouseMoved>()) {
 		sf::Vector2i mousePos = {event.getIf<sf::Event::MouseMoved>()->position.x, event.getIf<sf::Event::MouseMoved>()->position.y};
     	sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
@@ -66,7 +34,7 @@ InputActionResult Button::handleEvent(const sf::Event& event, sf::RenderWindow& 
 		} else if (text.has_value()) {
 			elementBounds = text->getGlobalBounds();
 		} else {
-			return InputActionResult{};
+			return;
 		}
 		bool currentlyHovered = elementBounds.contains(worldPos);
 		if (currentlyHovered != isHovered) {
@@ -88,14 +56,15 @@ InputActionResult Button::handleEvent(const sf::Event& event, sf::RenderWindow& 
         }
     }
 	if (event.is<sf::Event::MouseButtonReleased>()) {
-        if (event.getIf<sf::Event::MouseButtonReleased>()->button == sf::Mouse::Button::Left) {
-            if (isPressed && isHovered) {
-                isPressed = false;
+        if (event.getIf<sf::Event::MouseButtonReleased>()->button == sf::Mouse::Button::Left) {		
+			bool wasPressed = isPressed;
+			isPressed = false;
+			if (wasPressed && isHovered) {
+				isPressed = false;
                 updateColors(hovered);
-                return onClick();
+                onClick();
+				return;
             }
-            isPressed = false;
         }
     }
-	return InputActionResult{};
 }
