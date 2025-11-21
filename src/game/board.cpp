@@ -2,14 +2,13 @@
 #include "2048/game/board.hpp"
 #include "2048/game/random.hpp"
 #include "2048/game/scoreStorage.hpp"
-using namespace std;
 
 Board::Board(size_t width, size_t height) : width(width), height(height) {
 	tiles.resize(width * height, 0);
 }
 
 size_t Board::populate() {
-	static vector<size_t> emptyIndexes;
+	static std::vector<size_t> emptyIndexes;
 	emptyIndexes.clear();
 	for (size_t i = 0; i < tiles.size(); i++) {
 		if (tiles[i] == 0) {
@@ -41,12 +40,12 @@ void Board::reset() {
 	doPrefill();
 }
 
-const vector<uint64_t>& Board::getTiles() const {
+const std::vector<uint64_t>& Board::getTiles() const {
 	return tiles;
 }
 
-vector<uint64_t> Board::mergeLine(const vector<uint64_t>& line) {
-	vector<uint64_t> output;
+std::vector<uint64_t> Board::mergeLine(const std::vector<uint64_t>& line) {
+	std::vector<uint64_t> output;
 	output.resize(line.size(), 0);
 	uint64_t j = 0;
 	uint64_t jValue = 0;
@@ -67,8 +66,8 @@ vector<uint64_t> Board::mergeLine(const vector<uint64_t>& line) {
 	return output;
 }
 
-vector<uint64_t> Board::getRow(size_t i) {
-	vector<uint64_t> output;
+std::vector<uint64_t> Board::getRow(size_t i) {
+	std::vector<uint64_t> output;
 	output.reserve(width);
 	size_t startIndex = i * width;
 	for (size_t j = 0; j < width; j++) {
@@ -77,8 +76,8 @@ vector<uint64_t> Board::getRow(size_t i) {
 	return output;
 }
 
-vector<uint64_t> Board::getColumn(size_t i) {
-	vector<uint64_t> output;
+std::vector<uint64_t> Board::getColumn(size_t i) {
+	std::vector<uint64_t> output;
 	output.reserve(height);
 	for (size_t j = 0; j < height; j++) {
 		output.push_back(tiles[j * width + i]);
@@ -91,18 +90,18 @@ void Board::doMove(Direction direction) {
 	bool isVertical = direction == Direction::Up || direction == Direction::Down;
 	size_t size = isVertical ? height : width;
 	for (size_t i = 0; i < size; i++) {
-		vector<uint64_t> line;
+		std::vector<uint64_t> line;
 		if (direction == Direction::Up || direction == Direction::Down) {
 			line = getColumn(i);
 		} else {
 			line = getRow(i);
 		}
 		if (direction == Direction::Down || direction == Direction::Right) {
-			reverse(line.begin(), line.end());
+			std::reverse(line.begin(), line.end());
 		}
-		vector<uint64_t> mergedLine = mergeLine(line);
+		std::vector<uint64_t> mergedLine = mergeLine(line);
 		if (direction == Direction::Down || direction == Direction::Right) {
-			reverse(mergedLine.begin(), mergedLine.end());
+			std::reverse(mergedLine.begin(), mergedLine.end());
 		}
 		for (size_t j = 0; j < size; j++) {
 			size_t index = isVertical ? j * width + i : i * width + j;

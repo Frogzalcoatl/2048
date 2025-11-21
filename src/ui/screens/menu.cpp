@@ -1,19 +1,18 @@
 #include "2048/ui/screens/menu.hpp"
 #include "2048/ui/button.hpp"
 #include "2048/ui/assets.hpp"
-using namespace std;
 
-MenuScreen::MenuScreen(sf::RenderWindow& window, function<void()> playButton, function<void()> onQuit): onQuit{onQuit} {
+MenuScreen::MenuScreen(sf::RenderWindow& window, std::function<void()> playButton, std::function<void()> onQuit): onQuit{onQuit} {
     elements.push_back(
-        make_unique<UIElement>(
+        std::make_unique<UIElement>(
             sf::Vector2f{0.f, 0.f},
-            UIElementColorParams{nullopt, sf::Color{0xFAF8EFFF}},
-            nullopt,
+            UIElementColorParams{std::nullopt, sf::Color{0xFAF8EFFF}},
+            std::nullopt,
             sf::RectangleShape{{1920.f, 1080.f}}
         )
     );
     elements.push_back(
-        make_unique<UIElement>(
+        std::make_unique<UIElement>(
 			sf::Vector2f{100.f, 0.f},
 			UIElementColorParams{sf::Color{0x786E65FF}},
             UIElementTextParams{"2048", &Assets2048::boldFont, 300}
@@ -21,17 +20,17 @@ MenuScreen::MenuScreen(sf::RenderWindow& window, function<void()> playButton, fu
     );
     elements.back().get()->centerInWindow(window, Axis::X);
     elements.push_back(
-        make_unique<UIElement>(
+        std::make_unique<UIElement>(
             sf::Vector2f{0.f, 450.f},
-            UIElementColorParams{nullopt, sf::Color{0xBBADA0FF}},
-            nullopt,
+            UIElementColorParams{std::nullopt, sf::Color{0xBBADA0FF}},
+            std::nullopt,
             sf::RectangleShape{{475.f, 300.f}}
         )
     );
     elements.back().get()->centerInWindow(window, Axis::X);
     sf::Vector2f buttonSize = {400.f, 75.f};
     elements.push_back(
-        make_unique<Button>(
+        std::make_unique<Button>(
             playButton,
             sf::Vector2f{0.f, 500.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
@@ -43,7 +42,7 @@ MenuScreen::MenuScreen(sf::RenderWindow& window, function<void()> playButton, fu
     );
     elements.back().get()->centerInWindow(window, Axis::X);
     elements.push_back(
-        make_unique<Button>(
+        std::make_unique<Button>(
             onQuit,
             sf::Vector2f{0.f, 625.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},

@@ -1,10 +1,9 @@
 #include "2048/ui/button.hpp"
 #include "2048/ui/cursorManager.hpp"
-using namespace std;
 
 Button::Button(
-	function<void()> onClick, const sf::Vector2f& pos, const UIElementColorParams& normalColors, const UIElementColorParams& hoveredColors, const UIElementColorParams& clickedColors, 
-	optional<UIElementTextParams> textParams, optional<sf::RectangleShape> background
+	std::function<void()> onClick, const sf::Vector2f& pos, const UIElementColorParams& normalColors, const UIElementColorParams& hoveredColors, const UIElementColorParams& clickedColors, 
+	std::optional<UIElementTextParams> textParams, std::optional<sf::RectangleShape> background
 ) : UIElement(pos, normalColors, textParams, background), onClick(onClick), normal(normalColors), hovered(hoveredColors), clicked(clickedColors) {}
 
 void Button::updateColors(UIElementColorParams& colors) {

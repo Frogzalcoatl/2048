@@ -1,12 +1,11 @@
 #include "2048/ui/assets.hpp"
 #include <iostream>
-using namespace std;
 
 namespace Assets2048 {
     sf::Font boldFont;
     sf::Font regularFont;
     sf::Image icon;
-    unique_ptr<sf::Music> backgroundMusic;
+    std::unique_ptr<sf::Music> backgroundMusic;
     void loadAll() {
         if (
             !boldFont.openFromFile("./assets/fonts/ClearSans-Bold.ttf") ||
@@ -15,13 +14,13 @@ namespace Assets2048 {
         ) {
             // Throws if the two fonts dont load.
 			// This realistically should never happen unless the assets directory is deleted for whatever reason.
-            throw runtime_error("Unable to load assets.");
+            throw std::runtime_error("Unable to load assets.");
         }
     }
-    void loadMusic(const string& filePath) {
-        backgroundMusic = make_unique<sf::Music>();
+    void loadMusic(const std::string& filePath) {
+        backgroundMusic = std::make_unique<sf::Music>();
         if (!backgroundMusic->openFromFile(filePath)) {
-            cerr << "Warning: Could not load music from " << filePath << "." << endl;
+            std::cerr << "Warning: Could not load music from " << filePath << "." << std::endl;
             backgroundMusic.reset();
         }
     }

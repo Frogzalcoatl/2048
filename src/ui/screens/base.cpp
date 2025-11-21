@@ -1,5 +1,4 @@
 #include "2048/ui/screens/base.hpp"
-using namespace std;
 
 void UIScreen::draw(sf::RenderWindow& window) {
     for (auto& element : elements) {

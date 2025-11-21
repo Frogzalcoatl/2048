@@ -3,47 +3,46 @@
 #include "2048/game/stringToInt.hpp"
 #include "2048/game/scoreStorage.hpp"
 #include "2048/ui/assets.hpp"
-using namespace std;
 
-GameScreen::GameScreen(sf::RenderWindow& window, Board& board, function<void()> backButton, function<void()> newGameButton) 
+GameScreen::GameScreen(sf::RenderWindow& window, Board& board, std::function<void()> backButton, std::function<void()> newGameButton) 
 	: board{board}, boardRenderer{board.width, board.height},
 	score{
 		sf::Vector2f{938.f, 30.f},
         UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0xBBADA0FF}},
-        UIElementTextParams{to_string(board.getScore()), &Assets2048::boldFont, 28},
+        UIElementTextParams{std::to_string(board.getScore()), &Assets2048::boldFont, 28},
         sf::RectangleShape{{200.f, 70.f}}
 	}, highScore{
 		sf::Vector2f{1154.f, 30.f},
         UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0xBBADA0FF}},
-        UIElementTextParams{to_string(ScoreStorage::loadHighScore(board)), &Assets2048::boldFont, 28},
+        UIElementTextParams{std::to_string(ScoreStorage::loadHighScore(board)), &Assets2048::boldFont, 28},
         sf::RectangleShape{{200.f, 70.f}}
 	} {
 	score.moveTextPositionBy({0.f, 10.f});
 	highScore.moveTextPositionBy({0.f, 10.f});
     // Must explicitly state types in make_unique since template functions cant recogize types just from {}.
 	elements.push_back(
-        make_unique<UIElement>(
+        std::make_unique<UIElement>(
 			sf::Vector2f{1006.f, 35.f},
 			UIElementColorParams{sf::Color{0xEEE4D4FF}},
 			UIElementTextParams{"SCORE", &Assets2048::boldFont, 22}
 		)
     );
 	elements.push_back(
-        make_unique<UIElement>(
+        std::make_unique<UIElement>(
 			sf::Vector2f{1229.f, 35.f},
 			UIElementColorParams{sf::Color{0xEEE4D4FF}},
 			UIElementTextParams{"BEST", &Assets2048::boldFont, 22}
 		)
     );
 	elements.push_back(
-        make_unique<UIElement>(
+        std::make_unique<UIElement>(
 			sf::Vector2f{566.f, 20.f},
 			UIElementColorParams{sf::Color{0x786E65FF}},
 			UIElementTextParams{"2048", &Assets2048::boldFont, 75}
 		)
     );
 	elements.push_back(
-		make_unique<UIElement>(
+		std::make_unique<UIElement>(
 			sf::Vector2f{566.f, 110.f},
 			UIElementColorParams{sf::Color{0x786E65FF}},
 			UIElementTextParams{"Join numbers to get to the 2048 tile!", &Assets2048::regularFont, 22}
@@ -52,7 +51,7 @@ GameScreen::GameScreen(sf::RenderWindow& window, Board& board, function<void()> 
 
 	sf::Vector2f buttonSize = {250.f, 90.f};
     elements.push_back(
-        make_unique<Button>(
+        std::make_unique<Button>(
             backButton,
             sf::Vector2f{0.f, 965.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
@@ -64,7 +63,7 @@ GameScreen::GameScreen(sf::RenderWindow& window, Board& board, function<void()> 
     );
 	elements.back().get()->centerInWindow(window, Axis::X);
 	elements.push_back(
-        make_unique<Button>(
+        std::make_unique<Button>(
             newGameButton,
             sf::Vector2f{1600.f, 20.f},
 			UIElementColorParams{sf::Color{0xFFFFFFFF}, sf::Color{0x8F7A66FF}},
@@ -121,7 +120,7 @@ void GameScreen::draw(sf::RenderWindow& window) {
 }
 
 void GameScreen::setScore(uint64_t newScore) {
-	score.setText(to_string(newScore));
+	score.setText(std::to_string(newScore));
 	score.centerTextInBackground(Axis::X);
 	auto highScoreText = highScore.getText();
 	if (!highScoreText.has_value()) {
@@ -129,7 +128,7 @@ void GameScreen::setScore(uint64_t newScore) {
 	}
 	uint64_t highScoreNum = stringToUInt64(*highScoreText);
 	if (newScore > highScoreNum) {
-		highScore.setText(to_string(newScore));
+		highScore.setText(std::to_string(newScore));
 		highScore.centerTextInBackground(Axis::X);
 	}
 }

@@ -1,7 +1,6 @@
 #include "2048/ui/element.hpp"
 #include <SFML/Graphics.hpp>
 #include <exception>
-using namespace std;
 
 void UIElement::centerTextInBackground(Axis axis) {
 	if (!background.has_value() || !text.has_value()) {
@@ -20,10 +19,10 @@ void UIElement::centerTextInBackground(Axis axis) {
 	text->setPosition(newPosition);
 }
 
-UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, optional<UIElementTextParams> textParams, optional<sf::RectangleShape> backgroundArg) 
+UIElement::UIElement(const sf::Vector2f& pos, const UIElementColorParams& colors, std::optional<UIElementTextParams> textParams, std::optional<sf::RectangleShape> backgroundArg) 
 	: background{backgroundArg} {
 	if (!backgroundArg.has_value() && !textParams.has_value()) {
-		throw invalid_argument("UI Element must have either background or text.");
+		throw std::invalid_argument("UI Element must have either background or text.");
 	}
 	if (background.has_value()) {
 		background->setPosition(pos);
@@ -83,17 +82,17 @@ void UIElement::setFontSize(unsigned int fontSize) {
 	}
 }
 
-void UIElement::setText(const string& newText) {
+void UIElement::setText(const std::string& newText) {
 	if (text.has_value()) {
 		text->setString(newText);
 	}
 }
 
-optional<string> UIElement::getText() {
+std::optional<std::string> UIElement::getText() {
 	if (text.has_value()) {
 		return text->getString().toAnsiString();
 	} else {
-		return nullopt;
+		return std::nullopt;
 	}
 }
 

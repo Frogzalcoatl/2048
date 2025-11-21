@@ -4,8 +4,6 @@
 #include "2048/ui/screens/game.hpp"
 #include "2048/ui/assets.hpp"
 #include "2048/game/scoreStorage.hpp"
-#include <iostream>
-using namespace std;
 
 Game2048::~Game2048() {
 	uint64_t highscoreInFile = ScoreStorage::loadHighScore(board);
@@ -27,7 +25,7 @@ Game2048::Game2048(size_t boardWidth, size_t boardHeight)
 
 void Game2048::run() {
 	while (windowManager.window.isOpen()) {
-		while (const optional event = windowManager.window.pollEvent()) {
+		while (const std::optional event = windowManager.window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
 				windowManager.window.close();
 			} else if (const auto keyPressed = event->getIf<sf::Event::KeyPressed>()) {
@@ -41,7 +39,7 @@ void Game2048::run() {
 		}
 		if (nextScreen.has_value()) {
 			performScreenSwitch(*nextScreen);
-			nextScreen = nullopt;
+			nextScreen = std::nullopt;
 		}
 		windowManager.window.clear(backgroundColor);
 		draw();
@@ -56,7 +54,7 @@ void Game2048::requestScreenSwitch(UIScreenTypes screen) {
 void Game2048::performScreenSwitch(UIScreenTypes screen) {
 	switch (screen) {
 		case UIScreenTypes::Menu: {
-			currentUIScreen = make_unique<MenuScreen>(
+			currentUIScreen = std::make_unique<MenuScreen>(
 				windowManager.window,
 				// play button
 				[this]() {
@@ -69,7 +67,7 @@ void Game2048::performScreenSwitch(UIScreenTypes screen) {
 			);
 		}; break;
 		case UIScreenTypes::Game: {
-			currentUIScreen = make_unique<GameScreen>(
+			currentUIScreen = std::make_unique<GameScreen>(
 				windowManager.window, board,
 				// back button
 				[this]() {

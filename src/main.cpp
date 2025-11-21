@@ -1,21 +1,19 @@
 #include "2048/game2048.hpp"
 #include <iostream>
 
-using namespace std;
-
 int main() {
 	Game2048* game = nullptr;
 	try {
 		game = new Game2048{4, 4};
 		game->run();
-	} catch (runtime_error& e) {
-		cerr << e.what() << endl;
+	} catch (std::runtime_error& e) {
+		std::cerr << e.what() << std::endl;
 		if (game) {
 			delete game;
 		}
 		return 1;
 	} catch (...) {
-		cerr << "Unknown error occured." << endl;
+		std::cerr << "Unknown error occured." << std::endl;
 		if (game) {
 			delete game;
 		}
