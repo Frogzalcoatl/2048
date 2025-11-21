@@ -6,23 +6,35 @@
 #include <filesystem>
 #include <string>
 #include <sstream>
-#include <iostream>
 
 const std::string FOLDER_NAME = "data";
 const std::string TILES_FILE_NAME = "tiles.txt";
 const auto TILES_FILE_PATH = std::filesystem::path(FOLDER_NAME) / TILES_FILE_NAME;
 const std::string HIGHSCORE_FILE_NAME = "highscore.txt";
 const auto HIGHSCORE_FILE_PATH = std::filesystem::path(FOLDER_NAME) / HIGHSCORE_FILE_NAME;
+const std::string CURRENTSCORE_FILE_NAME = "currentscore.txt";
+const auto CURRENTSCORE_FILE_PATH = std::filesystem::path(FOLDER_NAME) / CURRENTSCORE_FILE_NAME;
 
 uint64_t Board::getHighScore() const {
 	return std::max(getScore(), cachedHighScore);
 }
 
-void Board::saveHighScoreToFile() const {
-    std::ofstream file(HIGHSCORE_FILE_PATH);
+void saveNumToTextFile(const uint64_t num, const std::filesystem::path& path) {
+    std::ofstream file(path);
     if (file.is_open()) {
-        file << cachedHighScore;
+        file << num;
     }
+}
+
+uint64_t loadNumFromTextFile(const std::filesystem::path& path) {
+	uint64_t num = 0;
+	std::ifstream file(path);
+    if (file.is_open()) {
+        std::string content;
+        file >> content;
+        num = stringToUInt64(content);
+    }
+	return num;
 }
 
 std::string vectorToString(const std::vector<uint64_t>& vec) {
@@ -109,7 +121,8 @@ void Board::saveData() {
         cachedHighScore = currentScore;
     }
 	saveBoardToFile();
-	saveHighScoreToFile();
+	saveNumToTextFile(getHighScore(), HIGHSCORE_FILE_PATH);
+	saveNumToTextFile(currentScore, CURRENTSCORE_FILE_PATH);
 }
 
 size_t Board::populate() {
@@ -136,21 +149,19 @@ void Board::doPrefill() {
 
 Board::Board(size_t width, size_t height, size_t prefill) : width{width}, height{height}, prefill{prefill} {
 	loadBoardFromFile();
-	std::ifstream file(HIGHSCORE_FILE_PATH);
-    if (file.is_open()) {
-        std::string content;
-        file >> content;
-        cachedHighScore = stringToUInt64(content);
-    }
+	currentScore = loadNumFromTextFile(CURRENTSCORE_FILE_PATH);
+	cachedHighScore = loadNumFromTextFile(HIGHSCORE_FILE_PATH);
 }
 
 void Board::reset() {
-	uint64_t currentScore = getScore();
-    if (currentScore > cachedHighScore) {
-        cachedHighScore = currentScore;
+	uint64_t score = getScore();
+    if (score > cachedHighScore) {
+        cachedHighScore = score;
     }
 	gameOverStatus = false;
 	fill(tiles.begin(), tiles.end(), 0);
+	currentScore = 0;
+	saveNumToTextFile(0, CURRENTSCORE_FILE_PATH);
 	doPrefill();
 }
 
@@ -170,6 +181,7 @@ std::vector<uint64_t> Board::mergeLine(const std::vector<uint64_t>& line) {
 		}
 		if (currentValue == jValue) {
 			output[j - 1] *= 2;
+			currentScore += output[j - 1];
 			jValue = 0;
 		} else {
 			jValue = currentValue;
@@ -252,11 +264,7 @@ void Board::updateGameOverStatus(size_t emptyCount) {
 }
 
 uint64_t Board::getScore() const {
-	uint64_t score = 0;
-	for (auto& value : tiles) {
-		score += value;
-	}
-	return score;
+	return currentScore;
 }
 
 bool Board::getGameOverStatus() const {

@@ -34,9 +34,9 @@ private:
 	std::vector<uint64_t> getRow(size_t i);
 	std::vector<uint64_t> getColumn(size_t i);
 	void updateGameOverStatus(size_t emptyCount);
-	void loadBoardFromFile();
 	bool isValidTilesVector(const std::vector<uint64_t> tilesVector) const;
-	void saveHighScoreToFile() const;
 	void saveBoardToFile() const;
+	void loadBoardFromFile();
 	uint64_t cachedHighScore = 0;
+	uint64_t currentScore = 0;
 };
