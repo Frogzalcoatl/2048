@@ -42,4 +42,5 @@ void WindowManager2048::applyWindowSettings() {
     sf::View view(sf::FloatRect({0.f, 0.f}, {1920.f, 1080.f}));
     window.setView(view);
     handleResize();
+    window.setKeyRepeatEnabled(false);
 }

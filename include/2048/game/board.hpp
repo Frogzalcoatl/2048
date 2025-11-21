@@ -22,8 +22,8 @@ public:
 	void doMove(Direction direction);
 	void reset();
 	const std::vector<uint64_t>& getTiles() const;
-	bool getGameOverStatus();
-	uint64_t getScore();
+	bool getGameOverStatus() const;
+	uint64_t getScore() const;
 
 private:
 	bool gameOverStatus = false;

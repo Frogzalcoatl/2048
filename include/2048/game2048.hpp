@@ -1,6 +1,5 @@
 #pragma once
 #include "2048/game/board.hpp"
-#include "2048/input/keyboard.hpp"
 #include "2048/ui/screens/base.hpp"
 #include "2048/ui/windowManager.hpp"
 #include <memory>
@@ -18,7 +17,6 @@ private:
 	void handleKeyboardInput(sf::Keyboard::Scancode scancode);
 	WindowManager2048 windowManager;
 	Board board;
-	KeyboardManager keyboardManager;
 	std::unique_ptr<UIScreen> currentUIScreen;
 	sf::Color backgroundColor;
 	std::optional<UIScreenTypes> nextScreen;

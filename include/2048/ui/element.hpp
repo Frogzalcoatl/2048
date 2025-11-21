@@ -30,7 +30,7 @@ public:
 	void setTextColor(const sf::Color& color);
 	void setFont(sf::Font* font);
 	void setFontSize(unsigned int fontSize);
-	void setText(std::string newText);
+	void setText(const std::string& newText);
 	std::optional<std::string> getText();
 	void draw(sf::RenderWindow& window);
 	void centerInWindow(sf::RenderWindow& window, Axis axis);

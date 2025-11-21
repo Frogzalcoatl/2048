@@ -83,7 +83,7 @@ void UIElement::setFontSize(unsigned int fontSize) {
 	}
 }
 
-void UIElement::setText(string newText) {
+void UIElement::setText(const string& newText) {
 	if (text.has_value()) {
 		text->setString(newText);
 	}

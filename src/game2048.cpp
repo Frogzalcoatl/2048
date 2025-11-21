@@ -4,6 +4,7 @@
 #include "2048/ui/screens/game.hpp"
 #include "2048/ui/assets.hpp"
 #include "2048/game/scoreStorage.hpp"
+#include <iostream>
 using namespace std;
 
 Game2048::~Game2048() {
@@ -12,12 +13,11 @@ Game2048::~Game2048() {
 	if (currentScore > highscoreInFile) {
 		ScoreStorage::saveHighScore(currentScore);
 	}
-	windowManager.window.close();
 }
 
 Game2048::Game2048(size_t boardWidth, size_t boardHeight)
     : board{boardWidth, boardHeight, 2}, backgroundColor{0xFAF8EFFF},
-	windowManager{}, keyboardManager{} {
+	windowManager{} {
 	Assets2048::loadAll();
 	windowManager.applyWindowSettings();
 	performScreenSwitch(UIScreenTypes::Menu);
@@ -31,12 +31,7 @@ void Game2048::run() {
 			if (event->is<sf::Event::Closed>()) {
 				windowManager.window.close();
 			} else if (const auto keyPressed = event->getIf<sf::Event::KeyPressed>()) {
-				auto keyPressedThisTick = keyboardManager.pressedEvent(keyPressed);
-				if (keyPressedThisTick.has_value()) {
-					handleKeyboardInput(keyPressed->scancode);
-				}
-			} else if (const auto keyReleased = event->getIf<sf::Event::KeyReleased>()) {
-				keyboardManager.releasedEvent(keyReleased);
+				handleKeyboardInput(keyPressed->scancode);
 			} else if (const auto resized = event->getIf<sf::Event::Resized>()) {
 				windowManager.handleResize();
 			}
@@ -83,6 +78,7 @@ void Game2048::performScreenSwitch(UIScreenTypes screen) {
 				// new game button
 				[this]() {
 					this->board.reset();
+					this->requestScreenSwitch(UIScreenTypes::Game);
 				}
 			);
 		}; break;
@@ -100,6 +96,7 @@ void Game2048::handleKeyboardInput(sf::Keyboard::Scancode scancode) {
 		windowManager.toggleFullScreen();
 		return;
 	}
-	currentUIScreen.get()->handleKeyboardInput(scancode);
-	
+	if (currentUIScreen) {
+		currentUIScreen->handleKeyboardInput(scancode);
+	}
 }

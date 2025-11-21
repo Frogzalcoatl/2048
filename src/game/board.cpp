@@ -9,7 +9,8 @@ Board::Board(size_t width, size_t height) : width(width), height(height) {
 }
 
 size_t Board::populate() {
-	vector<size_t> emptyIndexes;
+	static vector<size_t> emptyIndexes;
+	emptyIndexes.clear();
 	for (size_t i = 0; i < tiles.size(); i++) {
 		if (tiles[i] == 0) {
 			emptyIndexes.push_back(i);
@@ -137,7 +138,7 @@ void Board::updateGameOverStatus(size_t emptyCount) {
 	ScoreStorage::saveHighScore(getScore());
 }
 
-uint64_t Board::getScore() {
+uint64_t Board::getScore() const {
 	uint64_t score = 0;
 	for (auto& value : tiles) {
 		score += value;
@@ -145,6 +146,6 @@ uint64_t Board::getScore() {
 	return score;
 }
 
-bool Board::getGameOverStatus() {
+bool Board::getGameOverStatus() const {
 	return gameOverStatus;
 }

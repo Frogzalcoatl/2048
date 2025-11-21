@@ -7,7 +7,7 @@
 using namespace std;
 
 const string FOLDER_NAME = "data";
-const string FILE_PATH = FOLDER_NAME + "/highscore.txt";
+const std::filesystem::path FILE_PATH = std::filesystem::path(FOLDER_NAME) / "highscore.txt";
 
 uint64_t ScoreStorage::loadHighScore(Board& board) {
     if (!filesystem::exists(FILE_PATH)) {

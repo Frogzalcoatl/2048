@@ -42,7 +42,6 @@ set(SOURCES
     src/game/random.cpp
     src/game/scoreStorage.cpp
     src/game/stringToInt.cpp
-    src/input/keyboard.cpp
     src/ui/assets.cpp
     src/ui/boardRenderer.cpp
     src/ui/button.cpp
